@@ -8,7 +8,8 @@ SOURCES		=	main.cpp		\
 	PrimaryVDesc.cpp	\
 	Tag.cpp	\
 	VStructDesc.cpp	\
-	UDF.cpp
+	UDF.cpp \
+	PartitionDescriptor.cpp
 
 OBJS		=	$(SOURCES:.cpp=.o)
 
