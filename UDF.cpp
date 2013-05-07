@@ -4,10 +4,10 @@
 #include "VStructDesc.hpp"
 #include "Tag.hpp"
 #include "PrimaryVDesc.hpp"
+#include "PartitionDescriptor.hpp"
 #include <unistd.h>
 
-UDF::UDF(int fd)
-  : fd(fd), avdp(NULL), pvd(NULL)
+UDF::UDF(int fd) : fd(fd), avdp(NULL), pvd(NULL)
 {
 #ifdef NDEBUG
   debug = false;
@@ -16,6 +16,9 @@ UDF::UDF(int fd)
 #endif
 }
 
+bool UDF::getPartitionDescriptor() {
+  return true; 
+}
 
 bool UDF::isValid() {
   bool ret = VStructDesc::checkIsUDF(fd);
