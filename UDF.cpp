@@ -4,6 +4,7 @@
 #include "VStructDesc.hpp"
 #include "Tag.hpp"
 #include "PrimaryVDesc.hpp"
+#include <unistd.h>
 
 UDF::UDF(int fd)
   : fd(fd), avdp(NULL), pvd(NULL)

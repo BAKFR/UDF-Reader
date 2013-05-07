@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include <sstream>
+#include <unistd.h>
 #include "VStructDesc.hpp"
 
 

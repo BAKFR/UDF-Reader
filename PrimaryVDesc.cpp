@@ -1,6 +1,7 @@
 
 #include <sstream>
 #include <cstring>
+#include <unistd.h>
 #include "PrimaryVDesc.hpp"
 
 PrimaryVDesc::PrimaryVDesc(const Tag &tag)
