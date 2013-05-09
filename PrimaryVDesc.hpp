@@ -25,7 +25,7 @@ private:
   extend_ad		vol_abstract;
   extend_ad		vol_copyright;
   regid			app_id;
-  //timespamp
+  Timestamp		time;
   regid			impl_id;
   uint8_t		impl_use[64];
   uint32_t		previous_sequence;

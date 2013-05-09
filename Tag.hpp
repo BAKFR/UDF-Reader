@@ -56,3 +56,21 @@ struct regid {
   void		  setData(uint8_t *buffer);
   std::string toString() const;
 };
+
+struct Timestamp {
+  uint16_t		type;
+  uint8_t		flags;
+  int			data;
+  int16_t		year;
+  uint8_t		month;
+  uint8_t		day;
+  uint8_t		hour;
+  uint8_t		minute;
+  uint8_t		second;
+  uint8_t		centiseconds;
+  uint8_t		hundreds_microseconds;
+  uint8_t		microseconds;
+
+  void		  setData(uint8_t *buffer);
+  std::string toString() const;
+};

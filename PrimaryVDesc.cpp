@@ -42,7 +42,7 @@ void	PrimaryVDesc::setData(uint8_t *buffer) {
   vol_abstract.setData(buffer + 312);
   vol_copyright.setData(buffer + 320);
   app_id.setData(buffer + 328);
-  //timestamp
+  time.setData(buffer + 350);
   impl_id.setData(buffer + 372);
   memcpy(impl_use, buffer + 404, 64);
   previous_sequence = ((uint32_t*) (buffer + 468))[0];
@@ -66,7 +66,7 @@ std::string  PrimaryVDesc::toString() const {
 	  << "Volume Abstract: " << vol_abstract.toString()
 	  << "Volume Copyright: " << vol_copyright.toString()
 	  << "Application Id: " << app_id.toString()
-	//
+	  << "Time: " << time.toString() << "\n"
 	  << "Implementation Id: " << impl_id.toString()
 	  << "Implementation Use: `" << (char*)impl_use << "`\n"
 	  << "Previous sequence: " << previous_sequence << "\n"

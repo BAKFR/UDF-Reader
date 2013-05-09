@@ -2,6 +2,7 @@
 #include <sstream>
 #include <unistd.h>
 #include <cstring>
+#include <iomanip>
 #include "Tag.hpp"
 
 
@@ -94,3 +95,41 @@ std::string		regid::toString() const {
   return oss.str();
 
 }
+
+void		Timestamp::setData(uint8_t *buffer) {
+  type = ((uint16_t*) buffer)[0];
+  flags = type >> 12;
+  data = type & 0x0FFF;
+  if (data & 0x0800)
+	data = ~data & 0x0FFF;
+  year = ((int16_t*) (buffer + 2))[0];
+  month = buffer[4];
+  day = buffer[5];
+  hour = buffer[6];
+  minute = buffer[7];
+  second = buffer[8];
+  centiseconds = buffer[9];
+  hundreds_microseconds = buffer[10];
+  microseconds = buffer[11];
+}
+
+std::string		Timestamp::toString() const {
+  std::ostringstream oss;
+
+  oss.flags(std::ios_base::boolalpha);
+  oss.fill('0');
+
+  oss << std::setw(4) << year << "-" << std::setw(3) << month << "-"
+	  << std::setw(3) << day << "\t" << std::setw(3) << hour << "-"
+	  << std::setw(3) << minute << "-" << std::setw(3) << second;
+  if (data >= -1440 && data <= 1440) {
+	oss << "\t" << "GMT" << (data < 0 ? "-" : "+")
+		<< (data / 60);
+	if (data % 60) {
+	  oss << ":" << (data % 60);
+	}
+  }
+  return oss.str();
+
+}
+
