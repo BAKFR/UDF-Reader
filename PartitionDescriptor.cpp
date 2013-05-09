@@ -1,5 +1,7 @@
 #include "PartitionDescriptor.hpp"
 #include <cstring>
+#include <string>
+#include <sstream>
 
 void EntityID::setData(uint8_t *buffer) {
   flags = ((uint8_t*)buffer)[0];
@@ -9,6 +11,16 @@ void EntityID::setData(uint8_t *buffer) {
   memcpy(identifierSuffix, buffer, 8);
 }
 
+std::string EntityID::toString() {
+  std::ostringstream oss;
+  oss.flags(std::ios_base::boolalpha);
+
+  oss<<"=====Entity ID====="<<std::endl;
+  oss<<"flags : "<<flags<<std::endl;
+  oss<<"identifier : "<<identifier<<std::endl;
+  oss<<"identifier suffix : "<<identifierSuffix<<std::endl;
+  oss<<"==================="<<std::endl;
+}
 
 void PartitionDescriptor::setData(uint8_t *buffer) {
   descriptorTag.setData(buffer);

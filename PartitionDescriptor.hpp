@@ -8,6 +8,7 @@ struct EntityID {
   uint8_t identifier[23];
   uint8_t identifierSuffix[8];
   void setData(uint8_t *buffer);
+  std::string toString();
 };
 
 class PartitionDescriptor {
