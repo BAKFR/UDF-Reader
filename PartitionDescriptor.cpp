@@ -1,5 +1,6 @@
 #include "PartitionDescriptor.hpp"
 #include <cstring>
+#include <string>
 #include <sstream>
 
 PartitionDescriptor::PartitionDescriptor(const Tag &tag)
@@ -36,7 +37,8 @@ std::string PartitionDescriptor::toString() const {
 
   oss << "==== Partition Descriptor ====\n"
 	  << descriptorTag.toString() << "-------------\n"
-	  << "Volume descriptor sequence number : "<<volumeDescriptorSequenceNumber << "\n"
+	  << "Volume descriptor sequence number : "
+	  << volumeDescriptorSequenceNumber << "\n"
 	  << "Partition flags : "<< partitionFlags << "\n"
 	  << "Partition number : " << partitionNumber << "\n"
 	  << "Partition Content: " << partitionContent.toString()

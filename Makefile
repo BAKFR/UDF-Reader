@@ -10,7 +10,8 @@ SOURCES		=	main.cpp		\
 	VStructDesc.cpp	\
 	UDF.cpp \
 	PartitionDescriptor.cpp \
-	DString.cpp
+	DString.cpp \
+	LogicalVolumeDescriptor.cpp
 
 OBJS		=	$(SOURCES:.cpp=.o)
 
