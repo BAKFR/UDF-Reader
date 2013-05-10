@@ -5,9 +5,11 @@
 #include "Tag.hpp"
 #include "PrimaryVDesc.hpp"
 #include "PartitionDescriptor.hpp"
+#include "LogicalVolumeDescriptor.hpp"
 #include <unistd.h>
 
-UDF::UDF(int fd) : fd(fd), avdp(NULL), pvd(NULL), pd(NULL)
+UDF::UDF(int fd) : fd(fd), avdp(NULL), pvd(NULL), pd(NULL),
+				   lvd(NULL)
 {
 #ifdef NDEBUG
   debug = false;
@@ -25,7 +27,7 @@ bool UDF::loadPartitionDescriptor() {
 	std::cout << "== Load PD ==" << std::endl;
 
   if (tag.real_location == 0) {
-	std::cerr << "Error: Primary Volume Descriptor not found" << std::endl;
+	std::cerr << "Error: partition Descriptor not found" << std::endl;
 	return false;
   }
 
@@ -36,6 +38,29 @@ bool UDF::loadPartitionDescriptor() {
 
   if (debug)
 	std::cout << pd->toString() << std::endl;
+  return true;
+}
+
+bool UDF::loadLVD() {
+  if (lvd != NULL)
+	return true;
+
+  Tag tag = getTagSector(Tag::LogicVDesc);
+  if (debug)
+	std::cout << "== Load LVD ==" << std::endl;
+
+  if (tag.real_location == 0) {
+	std::cerr << "Error: Logical Volume Descriptor not found" << std::endl;
+	return false;
+  }
+
+  if ((lvd = LogicalVolumeDescriptor::loadFromFd(tag, fd)) == NULL) {
+	std::cerr << "Error: Unable to load Logical Volume Descriptor" << std::endl;
+	return false;
+  }
+
+  if (debug)
+	std::cout << lvd->toString() << std::endl;
   return true;
 }
 

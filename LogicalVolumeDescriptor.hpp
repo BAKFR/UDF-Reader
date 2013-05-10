@@ -7,7 +7,8 @@
 
 class LogicalVolumeDescriptor {
 protected:
-  Tag descriptorTag;
+  Tag tag;
+
   uint32_t volumeDescriptorSequenceNumber;
   charspec descriptorCharacterSet;
   uint8_t logicalVolumeIdentifier[128];
@@ -20,7 +21,10 @@ protected:
   uint8_t implementationUse[128];
   extend_ad integritySequenceExtent;
   uint8_t *partitionMap;
+
+  LogicalVolumeDescriptor(const Tag &tag);
 public:
   void setData(uint8_t *buffer);
   std::string toString() const;
+  static LogicalVolumeDescriptor *loadFromFd(const Tag &tag, int fd);
 };

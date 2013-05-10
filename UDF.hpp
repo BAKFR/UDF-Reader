@@ -5,6 +5,8 @@ class AVDP;
 class Tag;
 class PrimaryVDesc;
 class PartitionDescriptor;
+class LogicalVolumeDescriptor;
+
 
 class UDF {
 private:
@@ -13,6 +15,8 @@ private:
   AVDP			*avdp;
   PrimaryVDesc	*pvd;
   PartitionDescriptor *pd;
+  LogicalVolumeDescriptor *lvd;
+
   bool			debug;
 
   Tag	getTagSector(int type);
@@ -27,6 +31,7 @@ public:
 
   void listVDS();
   bool loadPartitionDescriptor();
-
+  bool loadLVD();
+  
   ~UDF();
 };
