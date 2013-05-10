@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "Tag.hpp"
+
 class AVDP;
 class Tag;
 class PrimaryVDesc;
@@ -9,6 +11,17 @@ class LogicalVolumeDescriptor;
 
 
 class UDF {
+public:
+
+  struct Info {
+	std::string			volume_id;
+	Timestamp			record_time;
+	//	std::string			version;
+	uint32_t			block_size;
+	uint32_t			nb_block;
+	//	long long int		free_size;
+  };
+
 private:
 
   int			fd;
@@ -26,11 +39,15 @@ public:
 
   bool isValid();
 
+  template <typename T>
+  T *loadDescriptor(Tag::Type type);
+
   bool loadAVDP();
-  bool loadInfo();
+  Info *loadInfo();
 
   void listVDS();
-  bool loadPartitionDescriptor();
+  bool loadPVD();
+  bool loadPD();
   bool loadLVD();
   
   ~UDF();

@@ -7,9 +7,10 @@
 #include "Tag.hpp"
 #include "DString.hpp"
 
-class PrimaryVDesc {
+#include "Descriptor.hpp"
+
+class PrimaryVDesc : public Descriptor {
 private:
-  Tag	tag;
 
   uint32_t		VDS_number;
   uint32_t		number;
@@ -32,11 +33,11 @@ private:
   uint32_t		previous_sequence;
   uint16_t		flags;
 
-  PrimaryVDesc(const Tag &tag);
+
 
 public:
-
+  PrimaryVDesc();
   void	setData(uint8_t *buffer);
-  static PrimaryVDesc *loadPVDFromFd(const Tag &tag, int fd);
   std::string  toString() const;
+  Timestamp		getTimestamp() const;
 };

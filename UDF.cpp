@@ -18,50 +18,87 @@ UDF::UDF(int fd) : fd(fd), avdp(NULL), pvd(NULL), pd(NULL),
 #endif
 }
 
-bool UDF::loadPartitionDescriptor() {
-  if (pd != NULL)
+bool UDF::loadPD() {
+  if (this->pd != NULL)
 	return true;
 
-  Tag tag = getTagSector(Tag::PartitionDesc);
-  if (debug)
-	std::cout << "== Load PD ==" << std::endl;
+  PartitionDescriptor *pd;
 
-  if (tag.real_location == 0) {
-	std::cerr << "Error: partition Descriptor not found" << std::endl;
-	return false;
-  }
-
-  if ((pd = PartitionDescriptor::loadFromFd(tag, fd)) == NULL) {
-	std::cerr << "Error: Unable to load Partition Descriptor" << std::endl;
-	return false;
-  }
+  pd = loadDescriptor<PartitionDescriptor>(Tag::PartitionDesc);
+  this->pd = pd;
 
   if (debug)
 	std::cout << pd->toString() << std::endl;
-  return true;
+
+  return pd != NULL;
 }
 
 bool UDF::loadLVD() {
-  if (lvd != NULL)
+  if (this->lvd != NULL)
 	return true;
 
-  Tag tag = getTagSector(Tag::LogicVDesc);
-  if (debug)
-	std::cout << "== Load LVD ==" << std::endl;
+  LogicalVolumeDescriptor *lvd;
 
-  if (tag.real_location == 0) {
-	std::cerr << "Error: Logical Volume Descriptor not found" << std::endl;
-	return false;
-  }
+  lvd = loadDescriptor<LogicalVolumeDescriptor>(Tag::LogicVDesc);
+  if (lvd) {
+	int length_pm = lvd->getLengthPM();
 
-  if ((lvd = LogicalVolumeDescriptor::loadFromFd(tag, fd)) == NULL) {
-	std::cerr << "Error: Unable to load Logical Volume Descriptor" << std::endl;
-	return false;
+	uint8_t *buffer = new uint8_t[length_pm];
+	if (read(fd, buffer, length_pm) != length_pm) {
+	  std::cerr << "Error: Unable to read partition maps from LVD" << std::endl;
+	  delete lvd;
+	  delete[] buffer;
+	  return NULL;
+	}
+	lvd->loadPartitionMaps(buffer);
+	delete buffer;
   }
+  this->lvd = lvd;
 
   if (debug)
 	std::cout << lvd->toString() << std::endl;
-  return true;
+
+  return lvd != NULL;
+}
+
+bool UDF::loadPVD() {
+  if (this->pvd != NULL)
+	return true;
+
+  PrimaryVDesc *pvd;
+
+  pvd = loadDescriptor<PrimaryVDesc>(Tag::PrimaryVDesc);
+  this->pvd = pvd;
+
+  if (debug)
+	std::cout << pvd->toString() << std::endl;
+  return pvd != NULL;
+}
+
+template <typename T>
+T *UDF::loadDescriptor(Tag::Type type) {
+
+  T *descriptor = new T();
+
+  Tag tag = getTagSector(type);
+  if (debug)
+	std::cout << "== Load Descriptor ==" << std::endl;
+
+  if (tag.real_location == 0) {
+	std::cerr << "Error: " << descriptor->getName()
+			  << " not found" << std::endl;
+	delete descriptor;
+	return NULL;
+  }
+
+  if (!descriptor->loadFromFd(tag, fd)) {
+	std::cerr << "Error: Unable to load "
+			  << descriptor->getName() << std::endl;
+	delete descriptor;
+	return NULL;
+  }
+
+  return descriptor;
 }
 
 bool UDF::isValid() {
@@ -138,27 +175,22 @@ Tag  UDF::getTagSector(int type) {
   return Tag(0);
 }
 
-bool UDF::loadInfo() {
-  if (pvd != NULL)
-	return true;
+UDF::Info *UDF::loadInfo() {
+  if (!loadPVD()
+	  || !loadPD()
+	  || !loadLVD())
+	return NULL;
 
-  Tag tag = getTagSector(Tag::PrimaryVDesc);
-  if (debug)
-	std::cout << "== Load Info ==" << std::endl;
+  Info *info = new Info();
 
-  if (tag.real_location == 0) {
-	std::cerr << "Error: Primary Volume Descriptor not found" << std::endl;
-	return false;
-  }
+  info->volume_id = lvd->getVolumeID();
+  info->record_time = pvd->getTimestamp();
+  //
+  info->block_size = lvd->getBlockSize();
+  info->nb_block = pd->getPartitionLength();
+  //
 
-  if ((pvd = PrimaryVDesc::loadPVDFromFd(tag, fd)) == NULL) {
-	std::cerr << "Error: Unable to load Primary Volume Descriptor" << std::endl;
-	return false;
-  }
-
-  if (debug)
-	std::cout << pvd->toString() << std::endl;
-  return true;
+  return info;
 }
 
 void UDF::listVDS() {

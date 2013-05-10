@@ -11,5 +11,6 @@ class DString {
 public:
   void	setData(uint8_t *buffer, int size, const charspec *charset);
   std::string	toString() const;
+  std::string	getRawString() const;
 };
 

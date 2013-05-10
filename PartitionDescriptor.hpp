@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Tag.hpp"
+#include "Descriptor.hpp"
 #include <cstdint>
 
-class PartitionDescriptor {
+
+class PartitionDescriptor : public Descriptor {
 protected:
-  Tag descriptorTag;
   uint32_t volumeDescriptorSequenceNumber;
   uint16_t partitionFlags;
   uint16_t partitionNumber;
@@ -17,9 +17,9 @@ protected:
   regid implementationIdentifier;
   uint8_t implementationUse[129];
 
-  PartitionDescriptor(const Tag &tag);
 public:
+  PartitionDescriptor();
   void setData(uint8_t *buffer);
   std::string toString() const;
-  static PartitionDescriptor *loadFromFd(const Tag &tag, int fd);
+  uint32_t		getPartitionLength() const;
 };

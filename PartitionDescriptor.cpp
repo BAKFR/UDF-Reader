@@ -3,8 +3,8 @@
 #include <string>
 #include <sstream>
 
-PartitionDescriptor::PartitionDescriptor(const Tag &tag)
-  : descriptorTag(tag)
+PartitionDescriptor::PartitionDescriptor()
+  : Descriptor("Partition Descriptor", 356)
 {
 }
 
@@ -35,8 +35,7 @@ void PartitionDescriptor::setData(uint8_t *buffer) {
 std::string PartitionDescriptor::toString() const {
   std::ostringstream oss;
 
-  oss << "==== Partition Descriptor ====\n"
-	  << descriptorTag.toString() << "-------------\n"
+  oss << Descriptor::toString()
 	  << "Volume descriptor sequence number : "
 	  << volumeDescriptorSequenceNumber << "\n"
 	  << "Partition flags : "<< partitionFlags << "\n"
@@ -51,15 +50,7 @@ std::string PartitionDescriptor::toString() const {
   return oss.str();
 }
 
-PartitionDescriptor *PartitionDescriptor::loadFromFd(const Tag &tag, int fd) {
-  PartitionDescriptor *pd = new PartitionDescriptor(tag);
-  uint8_t buffer[356];
-
-  if (read(fd, buffer, 356) != 356) {
-	std::cerr << "Error: Unable to read Partition Descriptor" << std::endl;
-	return NULL;
-  }
-
-  pd->setData(buffer);
-  return pd;
+uint32_t		PartitionDescriptor::getPartitionLength() const
+{
+  return partitionLength;
 }

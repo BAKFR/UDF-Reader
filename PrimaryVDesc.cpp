@@ -5,23 +5,10 @@
 #include "PrimaryVDesc.hpp"
 
 
-PrimaryVDesc::PrimaryVDesc(const Tag &tag)
-  : tag(tag)
+PrimaryVDesc::PrimaryVDesc()
+  : Descriptor("Primary Volume Descriptor", 490)
 {
 
-}
-
-PrimaryVDesc *PrimaryVDesc::loadPVDFromFd(const Tag &tag, int fd) {
-  PrimaryVDesc *pvd = new PrimaryVDesc(tag);
-  uint8_t buffer[474];
-
-  if (read(fd, buffer, 474) != 474) {
-	std::cerr << "Error: Unable to read Primary Volume Descriptor" << std::endl;
-	return NULL;
-  }
-
-  pvd->setData(buffer);
-  return pvd;
 }
 
 void	PrimaryVDesc::setData(uint8_t *buffer) {
@@ -56,8 +43,7 @@ void	PrimaryVDesc::setData(uint8_t *buffer) {
 std::string  PrimaryVDesc::toString() const {
   std::ostringstream oss;
 
-  oss << "==== Primary Volume Descriptor ====\n"
-	  << tag.toString() << "--------------\n"
+  oss << Descriptor::toString()
 	  << "V Desc Sequence number: " << VDS_number << "\n"
 	  << "PVD number: " << number << "\n"
 	  << "Id: " << id.toString() << "\n"
@@ -78,3 +64,7 @@ std::string  PrimaryVDesc::toString() const {
 	  << "Flags: " << flags << "\n";
   return oss.str();
 }
+
+Timestamp		PrimaryVDesc::getTimestamp() const {
+  return time;
+};
