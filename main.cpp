@@ -14,4 +14,5 @@ int main(int argc, char **argv) {
   udf.isValid();
   //udf.listVDS();
   udf.loadInfo();
+  udf.loadPartitionDescriptor();
 }

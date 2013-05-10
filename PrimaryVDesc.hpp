@@ -5,6 +5,7 @@
 #include <cstdint>
 
 #include "Tag.hpp"
+#include "DString.hpp"
 
 class PrimaryVDesc {
 private:
@@ -12,16 +13,16 @@ private:
 
   uint32_t		VDS_number;
   uint32_t		number;
-  char			id[33];
+  DString		id;
   uint16_t		seq_number;
   uint16_t		max_seq_number;
   uint16_t		interchange_level;
   uint16_t		max_interchange_level;
   uint32_t		charset_list;
   uint32_t		max_charset_list;
-  char			set_id[129];
-  //sp
-  //sp
+  DString		set_id;
+  charspec		desc_charset;
+  charspec		expl_charset;
   extend_ad		vol_abstract;
   extend_ad		vol_copyright;
   regid			app_id;

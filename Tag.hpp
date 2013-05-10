@@ -74,3 +74,12 @@ struct Timestamp {
   void		  setData(uint8_t *buffer);
   std::string toString() const;
 };
+
+struct charspec {
+  uint8_t		type;
+  uint8_t		data[63];
+
+  void		  setData(uint8_t *buffer);
+  std::string toString() const;
+};
+

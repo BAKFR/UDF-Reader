@@ -133,3 +133,16 @@ std::string		Timestamp::toString() const {
 
 }
 
+void	charspec::setData(uint8_t *buffer) {
+  type = buffer[0];
+  memcpy(data, buffer + 1, 63);
+}
+
+std::string		charspec::toString() const {
+  std::ostringstream oss;
+
+  oss << "charset CS" << (int)type
+	  << " (data: `" << data << "`)";
+
+  return oss.str();
+}

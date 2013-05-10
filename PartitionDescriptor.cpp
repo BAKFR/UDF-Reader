@@ -1,45 +1,63 @@
 #include "PartitionDescriptor.hpp"
 #include <cstring>
+#include <sstream>
 
-void EntityID::setData(uint8_t *buffer) {
-  flags = ((uint8_t*)buffer)[0];
-  buffer+=sizeof(uint8_t);
-  memcpy(identifier, buffer, 23);
-  buffer+=23;
-  memcpy(identifierSuffix, buffer, 8);
+PartitionDescriptor::PartitionDescriptor(const Tag &tag)
+  : descriptorTag(tag)
+{
 }
 
-
 void PartitionDescriptor::setData(uint8_t *buffer) {
-  descriptorTag.setData(buffer);
-  buffer+=sizeof(descriptorTag);
   volumeDescriptorSequenceNumber = ((uint32_t*)buffer)[0];
-  buffer+=sizeof(uint32_t);
+  buffer += 4;
   partitionFlags = ((uint16_t*)buffer)[0];
-  buffer+=sizeof(uint16_t);
+  buffer += 2;
   partitionNumber = ((uint16_t*)buffer)[0];
-  buffer+=sizeof(uint16_t);
+  buffer += 2;
   partitionContent.setData(buffer);
-  buffer+=sizeof(partitionContent);
+  buffer += 32;
   memcpy(partitionContentsUse, buffer, 128);
-  buffer+=128;
+  partitionContentsUse[128] = '\0';
+  buffer += 128;
   accessType = ((uint32_t*)buffer)[0];
-  buffer+=sizeof(uint32_t);
+  buffer += 4;
   partitionStartingLocation = ((uint32_t*)buffer)[0];
-  buffer+=sizeof(uint32_t);
+  buffer += 4;
   partitionLength = ((uint32_t*)buffer)[0];
-  buffer+=sizeof(uint32_t);
+  buffer += 4;
   implementationIdentifier.setData(buffer);
-  buffer+=sizeof(sizeof(implementationIdentifier));
+  buffer += 32;
   memcpy(implementationUse, buffer, 128);
+  implementationUse[128] = '\0';
 }
 
 std::string PartitionDescriptor::toString() const {
-  std::cout<<"Volume descriptor sequence number : "<<volumeDescriptorSequenceNumber<<std::endl;
-  std::cout<<"Partition flags : "<<partitionFlags<<std::endl;
-  std::cout<<"Partition number : "<<partitionNumber<<std::endl;
-  std::cout<<"Access type : "<<accessType<<std::endl;
-  std::cout<<"Partition starting location : "<<partitionStartingLocation<<std::endl;
-  std::cout<<"Partition length : "<<partitionLength<<std::endl;
-  return "";
+  std::ostringstream oss;
+
+  oss << "==== Partition Descriptor ====\n"
+	  << descriptorTag.toString() << "-------------\n"
+	  << "Volume descriptor sequence number : "<<volumeDescriptorSequenceNumber << "\n"
+	  << "Partition flags : "<< partitionFlags << "\n"
+	  << "Partition number : " << partitionNumber << "\n"
+	  << "Partition Content: " << partitionContent.toString()
+	  << "Partition Content USe: `" << partitionContentsUse << "`\n"
+	  << "Access type : "<<accessType << "\n"
+	  << "Partition Location : "<< partitionStartingLocation
+	  << " (length : " << partitionLength << ")\n"
+	  << "Implementation Id: " << implementationIdentifier.toString()
+	  << "Implementation USe: `" << implementationUse << "`\n";
+  return oss.str();
+}
+
+PartitionDescriptor *PartitionDescriptor::loadFromFd(const Tag &tag, int fd) {
+  PartitionDescriptor *pd = new PartitionDescriptor(tag);
+  uint8_t buffer[356];
+
+  if (read(fd, buffer, 356) != 356) {
+	std::cerr << "Error: Unable to read Partition Descriptor" << std::endl;
+	return NULL;
+  }
+
+  pd->setData(buffer);
+  return pd;
 }

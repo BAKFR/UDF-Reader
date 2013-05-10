@@ -26,7 +26,7 @@ public:
   bool loadInfo();
 
   void listVDS();
-  bool getPartitionDescriptor();
+  bool loadPartitionDescriptor();
 
   ~UDF();
 };

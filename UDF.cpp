@@ -7,7 +7,7 @@
 #include "PartitionDescriptor.hpp"
 #include <unistd.h>
 
-UDF::UDF(int fd) : fd(fd), avdp(NULL), pvd(NULL)
+UDF::UDF(int fd) : fd(fd), avdp(NULL), pvd(NULL), pd(NULL)
 {
 #ifdef NDEBUG
   debug = false;
@@ -16,8 +16,27 @@ UDF::UDF(int fd) : fd(fd), avdp(NULL), pvd(NULL)
 #endif
 }
 
-bool UDF::getPartitionDescriptor() {
-  return true; 
+bool UDF::loadPartitionDescriptor() {
+  if (pd != NULL)
+	return true;
+
+  Tag tag = getTagSector(Tag::PartitionDesc);
+  if (debug)
+	std::cout << "== Load PD ==" << std::endl;
+
+  if (tag.real_location == 0) {
+	std::cerr << "Error: Primary Volume Descriptor not found" << std::endl;
+	return false;
+  }
+
+  if ((pd = PartitionDescriptor::loadFromFd(tag, fd)) == NULL) {
+	std::cerr << "Error: Unable to load Partition Descriptor" << std::endl;
+	return false;
+  }
+
+  if (debug)
+	std::cout << pd->toString() << std::endl;
+  return true;
 }
 
 bool UDF::isValid() {
@@ -136,7 +155,6 @@ void UDF::listVDS() {
 	  std::cerr << "Error: Unable to read sector " << i << std::endl;
 	  return;
 	}
-	  
 
 	tag.setData(buffer);
 	std::cout << tag.toString()

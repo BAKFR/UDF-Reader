@@ -9,7 +9,8 @@ SOURCES		=	main.cpp		\
 	Tag.cpp	\
 	VStructDesc.cpp	\
 	UDF.cpp \
-	PartitionDescriptor.cpp
+	PartitionDescriptor.cpp \
+	DString.cpp
 
 OBJS		=	$(SOURCES:.cpp=.o)
 
