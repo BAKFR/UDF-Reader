@@ -57,7 +57,7 @@ std::string  PrimaryVDesc::toString() const {
 	  << "Volume Abstract: " << vol_abstract.toString()
 	  << "Volume Copyright: " << vol_copyright.toString()
 	  << "Application Id: " << app_id.toString()
-	  << "Time: " << time.toString() << "\n"
+	  << "Time: " << time.dump()
 	  << "Implementation Id: " << impl_id.toString()
 	  << "Implementation Use: `" << (char*)impl_use << "`\n"
 	  << "Previous sequence: " << previous_sequence << "\n"

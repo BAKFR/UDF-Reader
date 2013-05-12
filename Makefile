@@ -12,7 +12,8 @@ SOURCES		=	main.cpp		\
 	PartitionDescriptor.cpp \
 	DString.cpp \
 	LogicalVolumeDescriptor.cpp  \
-	Descriptor.cpp
+	Descriptor.cpp \
+	UnallocSpaceDesc.cpp
 
 OBJS		=	$(SOURCES:.cpp=.o)
 

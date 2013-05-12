@@ -22,10 +22,12 @@ void PartitionDescriptor::setData(uint8_t *buffer) {
   buffer += 128;
   accessType = ((uint32_t*)buffer)[0];
   buffer += 4;
-  partitionStartingLocation = ((uint32_t*)buffer)[0];
-  buffer += 4;
-  partitionLength = ((uint32_t*)buffer)[0];
-  buffer += 4;
+
+  partition.setData(buffer);
+  partition.location = ((uint32_t*)buffer)[0];
+  partition.length = ((uint32_t*)buffer)[1];
+  
+  buffer += 8;
   implementationIdentifier.setData(buffer);
   buffer += 32;
   memcpy(implementationUse, buffer, 128);
@@ -42,15 +44,14 @@ std::string PartitionDescriptor::toString() const {
 	  << "Partition number : " << partitionNumber << "\n"
 	  << "Partition Content: " << partitionContent.toString()
 	  << "Partition Content USe: `" << partitionContentsUse << "`\n"
-	  << "Access type : "<<accessType << "\n"
-	  << "Partition Location : "<< partitionStartingLocation
-	  << " (length : " << partitionLength << ")\n"
+	  << "Access type : " << accessType << "\n"
+	  << "Partition: " << partition.toString()
 	  << "Implementation Id: " << implementationIdentifier.toString()
 	  << "Implementation USe: `" << implementationUse << "`\n";
   return oss.str();
 }
 
-uint32_t		PartitionDescriptor::getPartitionLength() const
+extend_ad		PartitionDescriptor::getPartition() const
 {
-  return partitionLength;
+  return partition;
 }

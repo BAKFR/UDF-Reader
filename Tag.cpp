@@ -48,7 +48,7 @@ std::string		Tag::toString() const {
 
   oss.flags(std::ios_base::boolalpha);
   oss << "Tag" << "\n"
-	  << "Type: " << type << "\n"
+	  << "Type: " << type << " -- " << getTypeName() << "\n"
 	  << "version: " << (int)version << "\n"
 	  << "checksum: " << (int) checksum << " (" << isChecksumOK() << ")\n"
 	  << "serial: " << serial << "\n"
@@ -57,6 +57,54 @@ std::string		Tag::toString() const {
 
   return oss.str();
 
+}
+
+std::string		Tag::getTypeName() const {
+  switch (type) {
+  case 1:
+	return "Primary Volume Descriptor";
+  case 2:
+	return "Anchor Volume Descriptor Pointer";
+  case 3:
+	return "Volume Descriptor Pointer";
+  case 4:
+	return "Implementation Use Volume Descriptor";
+  case 5:
+	return "Partition Descriptor";
+  case 6:
+	return "Logical Volume Descriptor";
+  case 7:
+	return "Unallocated Space Descriptor";
+  case 8:
+	return "Terminating Descriptor";
+  case 9:
+	return "Logical Volume Integrity Descriptor";
+
+  case 256:
+	return "File Set Descriptor";
+  case 257:
+	return "File Identifier Descriptor";
+  case 258:
+	return "Allocation Extend Descriptor";
+  case 259:
+	return "Indirect Entry";
+  case 260:
+	return "Terminal Entry";
+  case 261:
+	return "File Entry";
+  case 262:
+	return "Extended Attribute Header Descriptor";
+  case 263:
+	return "Unallocated Space Entry";
+  case 264:
+	return "Space Bitmap Descriptor";
+  case 265:
+	return "Partition Integrity Entry";
+  case 266:
+	return "Extended File Entry";
+  default:
+	return "Unknow Type";
+  }
 }
 
 
@@ -129,6 +177,34 @@ std::string		Timestamp::toString() const {
 	  oss << ":" << (data % 60);
 	}
   }
+  return oss.str();
+
+}
+
+std::string		Timestamp::dump() const {
+  std::ostringstream oss;
+
+  oss.flags(std::ios_base::boolalpha);
+  oss.fill('0');
+
+  oss << "Timestamp ->\t";
+  if (data >= -1440 && data <= 1440) {
+	oss << "GMT" << (data < 0 ? "-" : "+")
+		<< (data / 60);
+	if (data % 60) {
+	  oss << ":" << (data % 60);
+	}
+  }
+  oss << "\n";
+  oss << "\tYears:\t" << (int)year << "\n"
+	  << "\tMonths:\t" << (int)month << "\n"
+	  << "\tDays:\t" << (int)day << "\n"
+	  << "\tHours:\t" << (int)hour << "\n"
+	  << "\tMinutes:\t" << (int)minute << "\n"
+	  << "\tSeconds:\t" << (int)second << "\n"
+	  << "\tCentiseconds:\t" << (int)centiseconds << "\n"
+	  << "\tHundreds Microseconds:\t" << (int)hundreds_microseconds << "\n"
+	  << "\tMicroseconds:\t" << (int)microseconds << "\n";
   return oss.str();
 
 }

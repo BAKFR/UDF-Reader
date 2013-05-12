@@ -12,8 +12,7 @@ protected:
   regid partitionContent;
   uint8_t partitionContentsUse[129];
   uint32_t accessType;
-  uint32_t partitionStartingLocation;
-  uint32_t partitionLength;
+  extend_ad partition;
   regid implementationIdentifier;
   uint8_t implementationUse[129];
 
@@ -21,5 +20,5 @@ public:
   PartitionDescriptor();
   void setData(uint8_t *buffer);
   std::string toString() const;
-  uint32_t		getPartitionLength() const;
+  extend_ad		getPartition() const;
 };

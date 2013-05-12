@@ -36,6 +36,7 @@ struct Tag {
   bool		  isLocationOK() const;
   bool		  isValid() const;
   std::string toString() const;
+  std::string getTypeName() const;
 };
 
 struct extend_ad {
@@ -73,6 +74,7 @@ struct Timestamp {
 
   void		  setData(uint8_t *buffer);
   std::string toString() const;
+  std::string dump() const;
 };
 
 struct charspec {

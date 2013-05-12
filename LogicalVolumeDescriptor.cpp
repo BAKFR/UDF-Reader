@@ -75,6 +75,7 @@ int		LogicalVolumeDescriptor::getLengthPM() const
 void	LogicalVolumeDescriptor::loadPartitionMaps(uint8_t *buffer)
 {
   partitionMaps = new PartitionMap[numberOfPartitionMaps];
+
   for (uint32_t i = 0; i < numberOfPartitionMaps; i++)
 	buffer += partitionMaps[i].setData(buffer);
 }
@@ -83,6 +84,7 @@ int		LogicalVolumeDescriptor::PartitionMap::setData(uint8_t *buffer)
 {
   type = buffer[0];
   length = buffer[1];
+  data = new uint8_t[length - 2];
   memcpy(data, buffer + 2, length - 2);
   if (type == 1) {
 	sequence_nbr = ((uint16_t*) data)[0];

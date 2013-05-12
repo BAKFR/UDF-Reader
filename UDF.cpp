@@ -6,10 +6,11 @@
 #include "PrimaryVDesc.hpp"
 #include "PartitionDescriptor.hpp"
 #include "LogicalVolumeDescriptor.hpp"
+#include "UnallocSpaceDesc.hpp"
 #include <unistd.h>
 
 UDF::UDF(int fd) : fd(fd), avdp(NULL), pvd(NULL), pd(NULL),
-				   lvd(NULL)
+				   lvd(NULL), usd(NULL)
 {
 #ifdef NDEBUG
   debug = false;
@@ -51,7 +52,7 @@ bool UDF::loadLVD() {
 	  return NULL;
 	}
 	lvd->loadPartitionMaps(buffer);
-	delete buffer;
+	delete[] buffer;
   }
   this->lvd = lvd;
 
@@ -59,6 +60,35 @@ bool UDF::loadLVD() {
 	std::cout << lvd->toString() << std::endl;
 
   return lvd != NULL;
+}
+
+bool UDF::loadUSD() {
+  if (this->usd != NULL)
+	return true;
+
+  UnallocSpaceDesc *usd;
+
+  usd = loadDescriptor<UnallocSpaceDesc>(Tag::UnallocSpDesc);
+  if (usd) {
+	int length = usd->getNbAllocDescs() * 8;
+  
+	uint8_t *buffer = new uint8_t[length];
+	if (read(fd, buffer, length) != length) {
+	  std::cerr << "Error: Unable to read Allocation Descriptors"
+				<< " from USD" << std::endl;
+	  delete usd;
+	  delete[] buffer;
+	  return NULL;
+	}
+	usd->loadAllocationDescs(buffer);
+	delete[] buffer;
+  }
+  this->usd = usd;
+
+  if (debug)
+	std::cout << usd->toString() << std::endl;
+
+  return usd != NULL;
 }
 
 bool UDF::loadPVD() {
@@ -178,7 +208,8 @@ Tag  UDF::getTagSector(int type) {
 UDF::Info *UDF::loadInfo() {
   if (!loadPVD()
 	  || !loadPD()
-	  || !loadLVD())
+	  || !loadLVD()
+	  || !loadUSD())
 	return NULL;
 
   Info *info = new Info();
@@ -187,17 +218,31 @@ UDF::Info *UDF::loadInfo() {
   info->record_time = pvd->getTimestamp();
   //
   info->block_size = lvd->getBlockSize();
-  info->nb_block = pd->getPartitionLength();
+  info->nb_block = pd->getPartition().length;
+  info->free_size = usd->getFreeSpace();
   //
 
   return info;
 }
 
-void UDF::listVDS() {
+void	UDF::listMVDS() {
   if (!loadAVDP())
 	return;
 
-  extend_ad ext = avdp->getMainVDS();
+  listVDS(avdp->getMainVDS());
+}
+
+void	UDF::listPartition() {
+  if (!loadPVD()
+	  || !loadPD()
+	  || !loadLVD())
+	return;
+
+  std::cout << "\n\n\n";
+  listVDS(pd->getPartition());
+}
+
+void UDF::listVDS(const extend_ad &ext) {
   unsigned char buffer[16];
 
   for (uint32_t i = ext.location; i < ext.location + (ext.length / 2048); i++) {

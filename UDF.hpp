@@ -8,7 +8,7 @@ class Tag;
 class PrimaryVDesc;
 class PartitionDescriptor;
 class LogicalVolumeDescriptor;
-
+class UnallocSpaceDesc;
 
 class UDF {
 public:
@@ -19,7 +19,7 @@ public:
 	//	std::string			version;
 	uint32_t			block_size;
 	uint32_t			nb_block;
-	//	long long int		free_size;
+	long double			free_size;
   };
 
 private:
@@ -27,8 +27,9 @@ private:
   int			fd;
   AVDP			*avdp;
   PrimaryVDesc	*pvd;
-  PartitionDescriptor *pd;
+  PartitionDescriptor	*pd;
   LogicalVolumeDescriptor *lvd;
+  UnallocSpaceDesc		*usd;
 
   bool			debug;
 
@@ -45,10 +46,14 @@ public:
   bool loadAVDP();
   Info *loadInfo();
 
-  void listVDS();
   bool loadPVD();
   bool loadPD();
   bool loadLVD();
+  bool loadUSD();
+
+  void	listPartition();
+  void	listMVDS();
+  void	listVDS(const extend_ad &ext);
   
   ~UDF();
 };
