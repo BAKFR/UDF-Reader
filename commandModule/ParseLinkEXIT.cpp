@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iostream>
 #include "CommandEXIT.hpp"
 #include "ParseLinkEXIT.hpp"
 
@@ -18,5 +19,17 @@ bool ParseLinkEXIT::test(std::string stringCommand) {
 }
 
 Command *ParseLinkEXIT::parse(std::string stringCommand) {
-  return new CommandEXIT;
+  std::stringstream parser(stringCommand);
+  std::string token;
+  int i = 0;
+
+  while (parser >> token) {
+    i++;
+  }
+  if (i == 1) {
+    return new CommandEXIT;
+  } else {
+    std::cout<<"Invalid arguments for EXIT command."<<std::endl;
+    return NULL;
+  }
 }

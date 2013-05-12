@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "UDF.hpp"
 #include "ParseLink.hpp"
 #include "FileSystemTree.hpp"
 #include "Command.hpp"
@@ -12,5 +13,5 @@ protected:
 public:
   CommandParser();
   Command* parse(std::string commandString);
-  bool execute(FileSystemTree &tree, Command &command);
+  bool execute(FileSystemTree &tree, Command &command, UDF& udf);
 };

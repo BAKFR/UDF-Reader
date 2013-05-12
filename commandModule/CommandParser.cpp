@@ -1,4 +1,5 @@
 #include <iostream>
+#include "UDF.hpp"
 #include "CommandParser.hpp"
 #include "ParseLinkFDISK.hpp"
 #include "ParseLinkEXIT.hpp"
@@ -27,6 +28,6 @@ Command *CommandParser::parse(std::string commandString) {
   return NULL;
 }
 
-bool CommandParser::execute(FileSystemTree &tree, Command &command) {
-  return command.execute(tree);
+bool CommandParser::execute(FileSystemTree &tree, Command &command, UDF &udf) {
+  return command.execute(tree, udf);
 }

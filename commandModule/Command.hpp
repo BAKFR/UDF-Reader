@@ -1,4 +1,7 @@
 #pragma once
+#include <vector>
+#include <string>
+#include "UDF.hpp"
 #include "FileSystemTree.hpp"
 
 enum CommandType {
@@ -13,7 +16,31 @@ class Command
 {
 protected:
   enum CommandType type;
+  std::vector<std::string> arguments;
 public:
-  virtual bool execute(FileSystemTree &tree) = 0;
+  virtual bool execute(FileSystemTree &tree, UDF& udf) = 0;
+  void addArgument(std::string argument) {
+    this->arguments.push_back(argument);
+  }
+  unsigned int getArgumentNumber() {
+    return arguments.size();
+  }
+  std::vector<std::string> &getArgumentList() {
+    return arguments;
+  }
+  std::string getArgument(unsigned int i) {
+    int count = 0;
+    std::vector<std::string>::iterator it;
+
+    if (i >= arguments.size()) {
+      return "";
+    }
+    it = arguments.begin();
+    while (count < i) {
+      it++;
+      count++;
+    }
+    return *it;
+  }
   virtual ~Command(){}
 };

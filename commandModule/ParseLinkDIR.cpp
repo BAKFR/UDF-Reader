@@ -1,5 +1,6 @@
 #include <string>
 #include <sstream>
+#include <iostream>
 #include "CommandDIR.hpp"
 #include "ParseLinkDIR.hpp"
 
@@ -20,6 +21,17 @@ bool ParseLinkDIR::test(std::string stringCommand) {
 }
 
 Command *ParseLinkDIR::parse(std::string stringCommand) {
-  return new CommandDIR;
+  std::stringstream parser(stringCommand);
+  std::string token;
+  int i = 0;
+
+  while (parser >> token) {
+    i++;
+  }
+  if (i == 1) {
+    return new CommandDIR;
+  } else {
+    std::cout<<"Invalid argument for DIR command."<<std::endl;
+  }
 }
 
