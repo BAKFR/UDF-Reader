@@ -9,6 +9,8 @@ bool ParseLinkFDISK::test(std::string stringCommand) {
   if (parser>>token) {
     if (token == "FDISK" || token == "fdisk") {
       return true;
+    } else {
+      return false;
     }
   }
   else {

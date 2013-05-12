@@ -8,10 +8,11 @@ SRC =	CommandCD.cpp \
 	Node.cpp \
 	NodeInformation.cpp \
 	ParseLinkCD.cpp \
+	ParseLinkCP.cpp \
 	ParseLinkDIR.cpp \
 	ParseLinkEXIT.cpp \
 	ParseLinkFDISK.cpp \
 	UDF.cpp \
 	main.cpp
 all:
-	g++ $(SRC) -o test
+	g++ $(SRC) -ggdb3 -o test

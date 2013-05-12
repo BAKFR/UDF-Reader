@@ -9,6 +9,8 @@ bool ParseLinkCP::test(std::string stringCommand) {
   if (parser>>token) {
     if (token == "CP" || token == "cp") {
       return true;
+    } else {
+      return false;
     }
   }
   else {
@@ -17,5 +19,5 @@ bool ParseLinkCP::test(std::string stringCommand) {
 }
 
 Command *ParseLinkCP::parse(std::string stringCommand) {
-  return new CommandFDISK;
+  return new CommandCP;
 }

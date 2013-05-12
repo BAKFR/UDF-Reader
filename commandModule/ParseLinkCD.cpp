@@ -11,6 +11,8 @@ bool ParseLinkCD::test(std::string stringCommand) {
     {
       if (token == "CD" || token == "cd") {
 	return true;
+      } else {
+	return false;
       }
     }
   else

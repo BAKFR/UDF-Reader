@@ -9,6 +9,8 @@ bool ParseLinkEXIT::test(std::string stringCommand) {
   if (parser >> token) {
     if (token == "EXIT" || token == "exit") {
       return true;
+    } else {
+      return false;
     }
   } else {
     return false;

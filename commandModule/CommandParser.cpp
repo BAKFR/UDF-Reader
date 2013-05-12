@@ -1,3 +1,4 @@
+#include <iostream>
 #include "CommandParser.hpp"
 #include "ParseLinkFDISK.hpp"
 #include "ParseLinkEXIT.hpp"

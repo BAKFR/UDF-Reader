@@ -10,6 +10,8 @@ bool ParseLinkDIR::test(std::string stringCommand) {
   if (parser>>token) {
     if (token == "DIR" || token == "dir") {
       return true;
+    } else {
+      return false;
     }
   }
   else {
