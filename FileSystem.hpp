@@ -19,6 +19,8 @@ private:
   T *loadDescriptor(Tag::Type type);
 public:
   FileSystem(const extend_ad &from, int block_size, int fd);
-  bool	loadRoot();
   Tag	getTagSector(int);
+
+  bool	loadRoot();
+  bool	loadFirstDir();
 };

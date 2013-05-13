@@ -25,6 +25,6 @@ protected:
 public:
   FileSetDesc();
   void	setData(uint8_t *buffer);
-  std::string  toString() const;
-
+  std::string		toString() const;
+  const long_ad		&getRootDir() const;
 };

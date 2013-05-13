@@ -40,7 +40,7 @@ Prompt::Prompt(int argc, char **argv) {
 
   i = udf->loadInfo();
   fs = new FileSystem(udf->getPartition(), udf->getSizeBlock(), fd);
-  fs->loadRoot();
+  fs->loadFirstDir();
 }
 
 void Prompt::run() {

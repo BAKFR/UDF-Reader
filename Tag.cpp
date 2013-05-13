@@ -223,19 +223,39 @@ std::string		charspec::toString() const {
   return oss.str();
 }
 
+
+void	lb_addr::setData(uint8_t *buffer) {
+  block_nbr = ((uint32_t*) buffer)[0];
+  partition_ref_nbr = ((uint16_t*) (buffer + 4))[0];
+}
+
+std::string		lb_addr::toString() const {
+  std::ostringstream oss;
+
+  if (partition_ref_nbr || block_nbr) {
+	oss << "lb_addr (partition " << partition_ref_nbr
+		<< ", block " << block_nbr << ")";
+  } else 
+	oss << "lb_addr (NULL)";
+  return oss.str();
+}
+
 void	long_ad::setData(uint8_t *buffer) {
   length = ((uint32_t*) buffer)[0];
-  location.block_nbr = ((uint32_t*) buffer)[1];
-  location.partition_ref_nbr = ((uint16_t*) (buffer + 8))[0];
+  location.setData(buffer + 4);
   memcpy(implementation_use, buffer + 10, 6);
 }
 
 std::string		long_ad::toString() const {
   std::ostringstream oss;
 
-  oss << "long_ad (length: " << length << ")\n"
-	  << "\tLocation: (partition " << location.partition_ref_nbr
-	  << ", block " << location.block_nbr << ")\n"
-	  << "\tImplementation Use: " << (char*) implementation_use << "\n";
+  if (length || location.partition_ref_nbr
+	  || location.block_nbr
+	  || memcmp(implementation_use, "\0\0\0\0\0\0", 6)) {
+	oss << "long_ad (length: " << length << ")\n"
+		<< "\t" << location.toString() << "\n"
+		<< "\tImplementation Use: `" << (char*) implementation_use << "`\n";
+  } else
+	oss << "long_ad(NULL)" << "\n";
   return oss.str();
 }

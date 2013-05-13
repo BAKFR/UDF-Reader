@@ -17,7 +17,8 @@ struct Tag {
 	TermDesc,
 	LogicVIntergrityDesc,
 
-	FileSetDesc = 256
+	FileSetDesc = 256,
+	FileEntry = 261
   };
 
   uint16_t	type;
@@ -91,6 +92,9 @@ struct charspec {
 struct lb_addr {
   uint32_t		block_nbr;
   uint16_t		partition_ref_nbr;
+
+  void		  setData(uint8_t *buffer);
+  std::string toString() const;
 };
 
 struct long_ad {

@@ -30,7 +30,9 @@ SOURCES		=	main.cpp		\
 	ParseLinkDIR.cpp \
 	ParseLinkEXIT.cpp \
 	ParseLinkFDISK.cpp \
-	Prompt.cpp
+	Prompt.cpp	\
+	ICBTag.cpp \
+	FileEntry.cpp
 
 OBJS		=	$(SOURCES:.cpp=.o)
 

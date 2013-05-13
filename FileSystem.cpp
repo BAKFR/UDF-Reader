@@ -1,6 +1,7 @@
 
 #include "FileSystem.hpp"
 #include "FileSetDesc.hpp"
+#include "FileEntry.hpp"
 #include <unistd.h>
 
 FileSystem::FileSystem(const extend_ad &from, int block_size, int fd)
@@ -25,6 +26,41 @@ bool	FileSystem::loadRoot() {
 	std::cout << root->toString() << std::endl;
   return true;
 }
+
+
+bool	FileSystem::loadFirstDir()
+{
+  debug = true;
+  if (!loadRoot())
+	return false;
+  const long_ad &addr = root->getRootDir();
+  
+  lseek(fd, location.location * 2048, SEEK_SET);
+  lseek(fd, addr.location.block_nbr * block_size, SEEK_CUR);
+
+  uint8_t buffer[16];
+
+  if (read(fd, buffer, 16) != 16) {
+	std::cerr << "Error: Unable to read sector " << std::endl;
+	return false;
+  }
+  
+  Tag tag(addr.location.block_nbr);
+  tag.setData(buffer);
+
+  if (tag.type == Tag::FileEntry)
+	{
+	  FileEntry fe;
+	  fe.loadFromFd(tag, fd);
+	  std::cout << fe.toString() << std::endl;
+	}
+
+  std::cout << tag.toString() << std::endl;
+
+
+  return true;
+}
+
 
 
 template <typename T>
@@ -71,7 +107,7 @@ Tag  FileSystem::getTagSector(int type) {
 
 	tag.setData(buffer);
 
-	if (tag.type == type) {
+	if (tag.type == type || type == 0) {
 	  if (!tag.isValid()) {
 		std::cerr << "Error: Tag Type " << type << " is not valid." << std::endl;
 		return Tag(0);

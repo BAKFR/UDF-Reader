@@ -61,3 +61,7 @@ std::string		FileSetDesc::toString() const {
 	  << "System Stream Directory ICB: " << sys_stream_dir_ICB.toString();
   return oss.str();
 }
+
+const long_ad &FileSetDesc::getRootDir() const {
+  return root_dir_ICB;
+}
