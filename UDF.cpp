@@ -274,3 +274,16 @@ UDF::~UDF() {
   close(fd);
 }
 
+
+const extend_ad &UDF::getPartition()
+{
+  if (!pd)
+	loadPD();
+
+  return pd->getPartition();
+}
+
+int		UDF::getSizeBlock()
+{
+  return lvd->getBlockSize();
+}

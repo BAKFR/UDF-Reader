@@ -54,6 +54,9 @@ public:
   void	listPartition();
   void	listMVDS();
   void	listVDS(const extend_ad &ext);
+
+  const extend_ad &getPartition();
+  int	getSizeBlock();
   
   ~UDF();
 };

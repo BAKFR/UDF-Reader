@@ -167,9 +167,9 @@ std::string		Timestamp::toString() const {
   oss.flags(std::ios_base::boolalpha);
   oss.fill('0');
 
-  oss << std::setw(4) << year << "-" << std::setw(3) << month << "-"
-	  << std::setw(3) << day << "\t" << std::setw(3) << hour << "-"
-	  << std::setw(3) << minute << "-" << std::setw(3) << second;
+  oss << std::setw(4) << (int)year << "-" << std::setw(2) << (int)month << "-"
+	  << std::setw(2) << (int)day << "\t" << std::setw(2) << (int)hour << "-"
+	  << std::setw(2) << (int)minute << "-" << std::setw(2) << (int)second;
   if (data >= -1440 && data <= 1440) {
 	oss << "\t" << "GMT" << (data < 0 ? "-" : "+")
 		<< (data / 60);

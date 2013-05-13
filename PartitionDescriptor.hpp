@@ -20,5 +20,5 @@ public:
   PartitionDescriptor();
   void setData(uint8_t *buffer);
   std::string toString() const;
-  extend_ad		getPartition() const;
+  const extend_ad		&getPartition() const;
 };

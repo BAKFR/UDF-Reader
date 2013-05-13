@@ -1,6 +1,7 @@
 
 #include <fcntl.h>
 #include "UDF.hpp"
+#include "FileSystem.hpp"
 
 int main(int argc, char **argv) {
 
@@ -49,6 +50,10 @@ int main(int argc, char **argv) {
 			<< "Disk Free Size:\t" << free_size << free_unit << "\n"
 			<< "\n\n";
 
-  //udf.listPartition();
+  udf.listPartition();
+
+  FileSystem fs(udf.getPartition(), udf.getSizeBlock(), fd);
+
+  fs.loadRoot();
   //udf.listMVDS();
 }

@@ -15,7 +15,9 @@ struct Tag {
 	LogicVDesc,
 	UnallocSpDesc,
 	TermDesc,
-	LogicVIntergrityDesc
+	LogicVIntergrityDesc,
+
+	FileSetDesc = 256
   };
 
   uint16_t	type;
