@@ -13,6 +13,7 @@ SRC =	CommandCD.cpp \
 	ParseLinkEXIT.cpp \
 	ParseLinkFDISK.cpp \
 	UDF.cpp \
-	main.cpp
+	main.cpp \
+	Prompt.cpp
 all:
 	g++ $(SRC) -ggdb3 -o test

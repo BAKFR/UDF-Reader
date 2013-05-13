@@ -25,9 +25,10 @@ Command *CommandParser::parse(std::string commandString) {
     }
     pl = pl->next;
   }
+  std::cout<<"Unrecognized command."<<std::endl;
   return NULL;
 }
 
-bool CommandParser::execute(FileSystemTree &tree, Command &command, UDF &udf) {
-  return command.execute(tree, udf);
+bool CommandParser::execute(FileSystemTree &tree, Command *command, UDF &udf) {
+  return command->execute(tree, udf);
 }

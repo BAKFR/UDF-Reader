@@ -1,8 +1,9 @@
 #include "CommandParser.hpp"
+#include "Prompt.hpp"
 #include <iostream>
 #include <string>
 
-void displayArguments(Command *cmd) {
+/*void displayArguments(Command *cmd) {
   unsigned int nb_arguments = cmd->getArgumentNumber();
   int i = 0;
   std::string arg;
@@ -12,11 +13,11 @@ void displayArguments(Command *cmd) {
     std::cout<<"Argument "<<i<<" = "<<arg<<std::endl;
     i++;
   }
-}
+  }*/
 
 int main(int argc, char *argv[])
 {
-  FileSystemTree fst;
+  /*FileSystemTree fst;
   UDF udf;
   CommandParser parser;
   std::string line;
@@ -26,8 +27,11 @@ int main(int argc, char *argv[])
   Command *cmd = parser.parse(line);
   if (cmd != NULL) {
     displayArguments(cmd);
-    parser.execute(fst, *cmd, udf);
+    parser.execute(fst, cmd, udf);
     }
-  }
+    }*/
+  Prompt prompt;
+
+  prompt.run();
   return 0;
 }

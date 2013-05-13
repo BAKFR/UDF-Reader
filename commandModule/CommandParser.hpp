@@ -13,5 +13,5 @@ protected:
 public:
   CommandParser();
   Command* parse(std::string commandString);
-  bool execute(FileSystemTree &tree, Command &command, UDF& udf);
+  bool execute(FileSystemTree &tree, Command *command, UDF& udf);
 };
