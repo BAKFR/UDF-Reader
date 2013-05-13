@@ -44,7 +44,7 @@ int main(int argc, char **argv) {
   std::cout << "\n\nfdisk:\n";
   std::cout << i->volume_id << "\n"
 			<< "Record Time: " << i->record_time.toString() << "\n"
-			<< "???\n";
+			<< "UDF Version: " << i->version << "\n";
   std::cout.precision(3);
   std::cout << "Disk Size:\t" << size << unit << "\n"
 			<< "Disk Free Size:\t" << free_size << free_unit << "\n"

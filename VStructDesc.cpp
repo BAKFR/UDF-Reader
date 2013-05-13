@@ -27,9 +27,9 @@ VStructDesc *VStructDesc::readFromFd(int fd) {
 std::string VStructDesc::toString() const {
   std::ostringstream oss;
 
-  oss << "Type: " << this->type << "\n";
+  oss << "Type: " << (int)this->type << "\n";
   oss << "Id: " << this->id << "\n";
-  oss << "version: " << this->version << "\n";
+  oss << "version: " << (int)this->version << "\n";
   oss << "Data: " << this->type << "\n";
   
   return oss.str();
@@ -60,10 +60,37 @@ bool	VStructDesc::checkIsUDF(int fd) {
 
 	if (!has_BEA)
 	  has_BEA = desc->isBEA();
-	else if (desc->isTEA())
+	else if (desc->isTEA()) {
+	  delete desc;
 	  return true;
-	
+	}
 	delete desc;
   }
   return false;
+}
+
+std::string	VStructDesc::getVersion(int fd) {
+  if (lseek(fd, 32768, SEEK_SET) != 32768)
+	return "";
+
+  int nb_remaining_read = MAX_DESCRIPTOR_READ;
+
+  while (nb_remaining_read --> 0) {
+	VStructDesc *desc = VStructDesc::readFromFd(fd);
+	
+	if (desc == NULL)
+	  return "";
+
+	if (!strcmp(desc->id, "NSR02"))
+	  return "1.02";
+	else if (!strcmp(desc->id, "NSR02"))
+	  return "1.03";
+
+	if (desc->isTEA()) {
+	  delete desc;
+	  return "";
+	}
+	delete desc;
+  }
+  return "";  
 }

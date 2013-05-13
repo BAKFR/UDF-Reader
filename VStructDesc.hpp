@@ -19,6 +19,7 @@ class VStructDesc
 
   static VStructDesc *readFromFd(int fd);
   static bool checkIsUDF(int fd);
+  static std::string getVersion(int fd);
 
   static const int SECTOR_SIZE = 2048;
   static const int MAX_DESCRIPTOR_READ = 16;

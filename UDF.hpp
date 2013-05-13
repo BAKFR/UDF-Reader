@@ -16,7 +16,7 @@ public:
   struct Info {
 	std::string			volume_id;
 	Timestamp			record_time;
-	//	std::string			version;
+	std::string			version;
 	uint32_t			block_size;
 	uint32_t			nb_block;
 	long double			free_size;

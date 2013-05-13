@@ -216,11 +216,10 @@ UDF::Info *UDF::loadInfo() {
 
   info->volume_id = lvd->getVolumeID();
   info->record_time = pvd->getTimestamp();
-  //
+  info->version = VStructDesc::getVersion(fd);
   info->block_size = lvd->getBlockSize();
   info->nb_block = pd->getPartition().length;
   info->free_size = usd->getFreeSpace();
-  //
 
   return info;
 }
