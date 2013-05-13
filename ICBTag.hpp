@@ -15,4 +15,5 @@ struct ICBTag {
 
   void setData(uint8_t *buffer);
   std::string toString() const;
+  std::string getStrFileType() const;
 };

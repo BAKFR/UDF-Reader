@@ -14,6 +14,37 @@ void	ICBTag::setData(uint8_t *buffer)
   flags = ((uint16_t*) (buffer + 18))[0];
 }
 
+std::string		ICBTag::getStrFileType() const {
+  switch (file_type) {
+  case 1:
+	return "Unallocated Space Entry";
+  case 2:
+	return "Partition Integrity Table";
+  case 3:
+	return "Indirect Entry";
+  case 4:
+	return "Directory";
+  case 5:
+	return "Byte Sequence";
+  case 6:
+	return "Special Block Device";
+  case 7:
+	return "Special Character Device";
+  case 8:
+	return "FIFO";
+  case 9:
+	return "C_ISSOCK";
+  case 11:
+	return "Terminal Entry";
+  case 12:
+	return "Symbolic Link";
+  case 13:
+	return "Stream Directory";
+  default:
+	return "Unknow type";
+  }
+}
+
 std::string		ICBTag::toString() const {
   std::ostringstream oss;
 
@@ -23,7 +54,7 @@ std::string		ICBTag::toString() const {
 	  << "\nStrategy: Type = " << strategy_type << "\n"
 	  << "\tArgs: " << (int) strategy_args[0] << " " << (int)strategy_args[1] << "\n"
 	  << "Max Number of Entries: " << max_nb_entries << "\n"
-	  << "File Type: " << file_type << "\n"
+	  << "File Type: " << (int)file_type << " -- " << getStrFileType() << "\n"
 	  << "Parent ICB Location: " << parent_ICB.toString() << "\n"
 	  << "Flags: " << flags
 	  << "\n--------------\n";
