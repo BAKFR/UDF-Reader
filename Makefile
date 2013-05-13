@@ -33,7 +33,9 @@ SOURCES		=	main.cpp		\
 	Prompt.cpp	\
 	ICBTag.cpp \
 	FileEntry.cpp \
-	FileIdentifier.cpp
+	FileIdentifier.cpp \
+	DeviceControl.cpp
+
 
 OBJS		=	$(SOURCES:.cpp=.o)
 
