@@ -1,6 +1,7 @@
 
 #include "FileSystem.hpp"
 #include "FileSetDesc.hpp"
+#include <unistd.h>
 
 FileSystem::FileSystem(const extend_ad &from, int block_size, int fd)
   : location(from), block_size(block_size), fd(fd), root(NULL)

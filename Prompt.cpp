@@ -1,9 +1,11 @@
 #include "Prompt.hpp"
 #include "Command.hpp"
 #include "UDF.hpp"
+#include "FileSystem.hpp"
 #include <string>
 #include <iostream>
 #include <cstdlib>
+#include <fcntl.h>
 
 void Prompt::displayArguments(Command *cmd) {
   unsigned int nb_arguments = cmd->getArgumentNumber();
@@ -31,14 +33,14 @@ Prompt::Prompt(int argc, char **argv) {
   }
 
   udf = new UDF(fd);
-  if (!udf.isValid()) {
+  if (!udf->isValid()) {
     std::cout<<argv[0]<<" is not a valid UDF volume."<<std::endl;
     exit(0);
   }
 
-  i = udf.loadInfo();
-  fs = new FileSystem(udf.getPartition(), udf.getSizeBlock(), fd);
-  fs.loadRoot();
+  i = udf->loadInfo();
+  fs = new FileSystem(udf->getPartition(), udf->getSizeBlock(), fd);
+  fs->loadRoot();
 }
 
 void Prompt::run() {

@@ -15,7 +15,22 @@ SOURCES		=	main.cpp		\
 	Descriptor.cpp \
 	UnallocSpaceDesc.cpp \
 	FileSystem.cpp \
-	FileSetDesc.cpp
+	FileSetDesc.cpp \
+	CommandCD.cpp \
+	CommandCP.cpp \
+	CommandDIR.cpp \
+	CommandEXIT.cpp \
+	CommandFDISK.cpp \
+	CommandParser.cpp \
+	FileSystemTree.cpp \
+	Node.cpp \
+	NodeInformation.cpp \
+	ParseLinkCD.cpp \
+	ParseLinkCP.cpp \
+	ParseLinkDIR.cpp \
+	ParseLinkEXIT.cpp \
+	ParseLinkFDISK.cpp \
+	Prompt.cpp
 
 OBJS		=	$(SOURCES:.cpp=.o)
 

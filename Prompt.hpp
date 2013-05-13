@@ -4,10 +4,12 @@
 #include "Command.hpp"
 #include "CommandParser.hpp"
 #include "UDF.hpp"
+#include "FileSystem.hpp"
 
 class Prompt {
 protected:
   int fd;
+  FileSystem *fs;
   UDF::Info *i;
   FileSystemTree fst;
   UDF *udf;

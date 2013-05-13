@@ -1,6 +1,7 @@
 
 #include "Descriptor.hpp"
 #include <sstream>
+#include <unistd.h>
 
 Descriptor::Descriptor(const std::string &name, size_t size)
   : name(name), size(size), tag(0)
