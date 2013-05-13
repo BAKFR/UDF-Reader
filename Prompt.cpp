@@ -9,7 +9,7 @@
 
 void Prompt::displayArguments(Command *cmd) {
   unsigned int nb_arguments = cmd->getArgumentNumber();
-  int i = 0;
+  unsigned int i = 0;
   std::string arg;
 
   while (i < nb_arguments) {
