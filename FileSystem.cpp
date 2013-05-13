@@ -6,6 +6,11 @@
 FileSystem::FileSystem(const extend_ad &from, int block_size, int fd)
   : location(from), block_size(block_size), fd(fd), root(NULL)
 {
+#ifdef NDEBUG
+  debug = false;
+#else
+  debug = true;
+#endif
 }
 
 bool	FileSystem::loadRoot() {
@@ -16,7 +21,8 @@ bool	FileSystem::loadRoot() {
 
   if (!root)
 	return false;
-  std::cout << root->toString() << std::endl;
+  if (debug)
+	std::cout << root->toString() << std::endl;
   return true;
 }
 

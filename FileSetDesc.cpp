@@ -30,12 +30,12 @@ void			FileSetDesc::setData(uint8_t *buffer) {
   buffer += 32;
   abstract_id.setData(buffer, 32, &fs_charset);
   buffer += 32;
-  
+  root_dir_ICB.setData(buffer);
   buffer += 16;
   domain_id.setData(buffer);
   buffer += 32;
-  //
-  //
+  next_extent.setData(buffer);
+  sys_stream_dir_ICB.setData(buffer + 16);
 }
 
 std::string		FileSetDesc::toString() const {
@@ -55,8 +55,9 @@ std::string		FileSetDesc::toString() const {
 	  << "FileSet ID: " << fs_id.toString() << "\n"
 	  << "Copyright ID: " << copyright_id.toString()<< "\n"
 	  << "Abstract ID: " << abstract_id.toString() << "\n"
-	//
-	  << "Domain ID: " << domain_id.toString();
-	//
+	  << "Root Directory ICB: " << root_dir_ICB.toString()
+	  << "Domain ID: " << domain_id.toString()
+	  << "Next extent: " << next_extent.toString()
+	  << "System Stream Directory ICB: " << sys_stream_dir_ICB.toString();
   return oss.str();
 }

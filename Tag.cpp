@@ -222,3 +222,20 @@ std::string		charspec::toString() const {
 
   return oss.str();
 }
+
+void	long_ad::setData(uint8_t *buffer) {
+  length = ((uint32_t*) buffer)[0];
+  location.block_nbr = ((uint32_t*) buffer)[1];
+  location.partition_ref_nbr = ((uint16_t*) (buffer + 8))[0];
+  memcpy(implementation_use, buffer + 10, 6);
+}
+
+std::string		long_ad::toString() const {
+  std::ostringstream oss;
+
+  oss << "long_ad (length: " << length << ")\n"
+	  << "\tLocation: (partition " << location.partition_ref_nbr
+	  << ", block " << location.block_nbr << ")\n"
+	  << "\tImplementation Use: " << (char*) implementation_use << "\n";
+  return oss.str();
+}

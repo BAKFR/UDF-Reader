@@ -34,7 +34,6 @@ bool CommandFDISK::execute(FileSystemTree &tree, UDF& udf) {
   std::cout.precision(3);
   std::cout<<"Disk Size:\t"<<size<<unit<<"\n"
 	   <<"Disk Free size:\t"<<free_size<<free_unit<<"\n\n\n";
-  udf.listPartition();
 
   std::cout<<"Command FDISK executed."<<std::endl;
   return true;

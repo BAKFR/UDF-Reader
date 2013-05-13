@@ -7,6 +7,8 @@ class FileSetDesc;
 
 class FileSystem {
 private:
+  bool			debug;
+
   extend_ad		location;
   int			block_size;
   int			fd;

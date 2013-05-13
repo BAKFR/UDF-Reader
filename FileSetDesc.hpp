@@ -18,10 +18,10 @@ protected:
   DString		fs_id;
   DString		copyright_id;
   DString		abstract_id;
-  //extend_ad		root_dir_ICB;
+  long_ad		root_dir_ICB;
   regid			domain_id;
-  //extend_ad		next_extent;
-  //extend_ad		stream_dir_ICB;
+  long_ad		next_extent;
+  long_ad		sys_stream_dir_ICB;
 public:
   FileSetDesc();
   void	setData(uint8_t *buffer);

@@ -87,3 +87,17 @@ struct charspec {
   std::string toString() const;
 };
 
+
+struct lb_addr {
+  uint32_t		block_nbr;
+  uint16_t		partition_ref_nbr;
+};
+
+struct long_ad {
+  uint32_t		length;
+  lb_addr		location;
+  uint8_t		implementation_use[6];
+
+  void		  setData(uint8_t *buffer);
+  std::string toString() const;
+};
