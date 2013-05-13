@@ -25,7 +25,7 @@ Prompt::Prompt(int argc, char **argv) {
     std::cout<<"Usage: ./udf fileToParse"<<std::endl;
     exit(0);
   }
-  fd = open(argv[0], O_RDONLY);
+  fd = open(argv[1], O_RDONLY);
 
   if (fd < 2) {
     std::cout<<"Unable to open UDF volume "<<argv[0]<<std::endl;
@@ -34,7 +34,7 @@ Prompt::Prompt(int argc, char **argv) {
 
   udf = new UDF(fd);
   if (!udf->isValid()) {
-    std::cout<<argv[0]<<" is not a valid UDF volume."<<std::endl;
+    std::cout<<argv[1]<<" is not a valid UDF volume."<<std::endl;
     exit(0);
   }
 
