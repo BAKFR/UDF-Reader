@@ -26,5 +26,4 @@ public:
   FileSetDesc();
   void	setData(uint8_t *buffer);
   std::string  toString() const;
-
 };

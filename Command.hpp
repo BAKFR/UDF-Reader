@@ -33,7 +33,7 @@ public:
     return arguments;
   }
   std::string getArgument(unsigned int i) {
-    int count = 0;
+    unsigned int count = 0;
     std::vector<std::string>::iterator it;
 
     if (i >= arguments.size()) {

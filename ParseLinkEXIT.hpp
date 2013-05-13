@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 
 #include "ParseLink.hpp"
 #include "Command.hpp"

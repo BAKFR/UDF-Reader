@@ -3,6 +3,7 @@
 #include "CommandFDISK.hpp"
 
 bool CommandFDISK::execute(FileSystemTree &tree, UDF& udf) {
+  (void)tree;
   long double size = (uint64_t)i->block_size * i->nb_block;
   long double free_size = (uint64_t)i->free_size * i->nb_block;
   size /= 1024;

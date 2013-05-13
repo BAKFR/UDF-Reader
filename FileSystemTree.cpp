@@ -6,6 +6,7 @@ FileSystemTree::FileSystemTree() {
 }
 
 void FileSystemTree::buildFromUDF(UDF &udf) {
+  (void)udf;
 }
 
 Node *FileSystemTree::getRoot() {
@@ -17,5 +18,6 @@ Node *FileSystemTree::getWorkingDirectory() {
 }
 
 Node *FileSystemTree::getNode(std::string path) {
+  (void)path;
   return NULL;
 }

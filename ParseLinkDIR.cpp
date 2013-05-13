@@ -33,5 +33,6 @@ Command *ParseLinkDIR::parse(std::string stringCommand) {
   } else {
     std::cout<<"Invalid argument for DIR command."<<std::endl;
   }
+  return NULL;
 }
 

@@ -19,4 +19,5 @@ public:
   std::string	toString() const;
 
   const std::string	&getName() const;
+  virtual ~Descriptor(){}
 };
