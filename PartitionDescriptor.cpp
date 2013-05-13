@@ -51,7 +51,7 @@ std::string PartitionDescriptor::toString() const {
   return oss.str();
 }
 
-extend_ad		PartitionDescriptor::getPartition() const
+const extend_ad		&PartitionDescriptor::getPartition() const
 {
   return partition;
 }

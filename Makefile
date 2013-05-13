@@ -13,7 +13,9 @@ SOURCES		=	main.cpp		\
 	DString.cpp \
 	LogicalVolumeDescriptor.cpp  \
 	Descriptor.cpp \
-	UnallocSpaceDesc.cpp
+	UnallocSpaceDesc.cpp \
+	FileSystem.cpp \
+	FileSetDesc.cpp
 
 OBJS		=	$(SOURCES:.cpp=.o)
 
