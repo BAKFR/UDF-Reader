@@ -35,8 +35,7 @@ bool	FileSystem::loadFirstDir()
 	return false;
   const long_ad &addr = root->getRootDir();
   
-  lseek(fd, location.location * 2048, SEEK_SET);
-  lseek(fd, addr.location.block_nbr * block_size, SEEK_CUR);
+  goTo(addr.location.block_nbr);
 
   uint8_t buffer[16];
 
@@ -50,13 +49,39 @@ bool	FileSystem::loadFirstDir()
 
   if (tag.type == Tag::FileEntry)
 	{
-	  FileEntry fe;
+	  FileEntry fe(root->getCharset());
 	  fe.loadFromFd(tag, fd);
+	  fe.loadAllocDescs(*this, fd);
+
 	  std::cout << fe.toString() << std::endl;
 	}
+  else
+	std::cout << tag.toString() << std::endl;
 
-  std::cout << tag.toString() << std::endl;
+  ////////////
+  for (int i = 1; i < 20; i++)
+  {
+	goTo(addr.location.block_nbr + i);
 
+	if (read(fd, buffer, 16) != 16) {
+	  std::cerr << "Error: Unable to read sector " << std::endl;
+	  return false;
+	}
+  
+	Tag tag(i);
+	tag.setData(buffer);
+
+	if (tag.type == Tag::FileEntry)
+	  {
+		FileEntry fe(root->getCharset());
+		fe.loadFromFd(tag, fd);
+		fe.loadAllocDescs(*this, fd);
+
+		std::cout << fe.toString() << std::endl;
+	  }
+
+  }
+  /////////////
 
   return true;
 }
@@ -126,4 +151,13 @@ Tag  FileSystem::getTagSector(int type) {
 	std::cout << "Terminating Tag -- Tag " << type << " not found" << std::endl;
   }
   return Tag(0);
+}
+
+
+
+bool	FileSystem::goTo(uint32_t sector)
+{
+  lseek(fd, location.location * 2048, SEEK_SET);
+  lseek(fd, sector * block_size, SEEK_CUR);
+  return true;
 }

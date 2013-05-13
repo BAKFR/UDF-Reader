@@ -105,3 +105,11 @@ struct long_ad {
   void		  setData(uint8_t *buffer);
   std::string toString() const;
 };
+
+struct short_ad {
+  uint32_t		length;
+  uint32_t		position;
+
+  void		  setData(uint8_t *buffer);
+  std::string toString() const;
+};

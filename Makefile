@@ -32,7 +32,8 @@ SOURCES		=	main.cpp		\
 	ParseLinkFDISK.cpp \
 	Prompt.cpp	\
 	ICBTag.cpp \
-	FileEntry.cpp
+	FileEntry.cpp \
+	FileIdentifier.cpp
 
 OBJS		=	$(SOURCES:.cpp=.o)
 

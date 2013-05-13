@@ -45,6 +45,34 @@ std::string		ICBTag::getStrFileType() const {
   }
 }
 
+std::string ICBTag::displayFlags() const {
+  std::ostringstream oss;
+
+  char type_ad = flags & 0x04;
+  oss << "Type AD: ";
+  switch (type_ad) {
+  case 0:
+	oss << "short_ad";
+	break;
+  case 1:
+	oss << "long_ad";
+	break;
+  case 2:
+	oss << "ext_ad";
+	break;
+  case 3:
+	oss << "inline content";
+	break;
+  default:
+	oss << "unknown";
+  }
+  return oss.str();
+}
+
+int		ICBTag::getTypeAd() const {
+  return flags & 0x04;
+}
+
 std::string		ICBTag::toString() const {
   std::ostringstream oss;
 
@@ -56,7 +84,8 @@ std::string		ICBTag::toString() const {
 	  << "Max Number of Entries: " << max_nb_entries << "\n"
 	  << "File Type: " << (int)file_type << " -- " << getStrFileType() << "\n"
 	  << "Parent ICB Location: " << parent_ICB.toString() << "\n"
-	  << "Flags: " << flags
+	  << "Flags: " << flags << "\n"
+	  << "\t" << displayFlags()
 	  << "\n--------------\n";
   return oss.str();
 

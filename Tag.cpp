@@ -259,3 +259,19 @@ std::string		long_ad::toString() const {
 	oss << "long_ad(NULL)" << "\n";
   return oss.str();
 }
+
+void	short_ad::setData(uint8_t *buffer) {
+  length = ((uint32_t*) buffer)[0];
+  position = ((uint32_t*) buffer)[1];
+}
+
+std::string		short_ad::toString() const {
+  std::ostringstream oss;
+
+  if (length || position) {
+	oss << "short_ad (length: " << length << ", "
+		<< "position: " << position << ")\n";
+  } else
+	oss << "short_ad(NULL)" << "\n";
+  return oss.str();
+}

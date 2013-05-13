@@ -65,3 +65,7 @@ std::string		FileSetDesc::toString() const {
 const long_ad &FileSetDesc::getRootDir() const {
   return root_dir_ICB;
 }
+
+const charspec &FileSetDesc::getCharset() const {
+  return fs_charset;
+}

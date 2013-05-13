@@ -20,6 +20,7 @@ private:
 public:
   FileSystem(const extend_ad &from, int block_size, int fd);
   Tag	getTagSector(int);
+  bool	goTo(uint32_t sector);
 
   bool	loadRoot();
   bool	loadFirstDir();
