@@ -3,6 +3,7 @@
 #include "FileSystem.hpp"
 #include "FileIdentifier.hpp"
 #include <sstream>
+#include <memory>
 
 FileEntry::FileEntry(const charspec &charset)
   : Descriptor("File Entry", 176), charset(charset)
@@ -34,12 +35,12 @@ bool	FileEntry::loadAllocDescs(FileSystem &fs, int fd) {
   int length = getSizeAlloc();
 
   uint8_t *buffer = new uint8_t[length];
+  std::unique_ptr<uint8_t[]> ptrBuffer(buffer);
+
   if (read(fd, buffer, length) != length) {
 	std::cerr << "Error: Unable to read alloc descriptors for FE" << std::endl;
-	delete[] buffer;
 	return false;
   }
-  delete[] buffer;
 
   // TODO: HERE READ ATTRS
   buffer += length_ext_attrs;
@@ -49,22 +50,26 @@ bool	FileEntry::loadAllocDescs(FileSystem &fs, int fd) {
   for (uint32_t i = 0; i < length_alloc_descs / 8; i++) {
 	alloc_descrs[i].setData(buffer);
 	buffer += 8;
-  }
 
-  //Load of the first Allocation Descriptor (File Identifier)
-  if (length_alloc_descs > 0) {
-	if (!fs.goTo(alloc_descrs[0].position))
+	if (!fs.goTo(alloc_descrs[i].position))
 	  return false;
 
-	buffer = new uint8_t[alloc_descrs[0].length];
-	if (read(fd, buffer, alloc_descrs[0].length) != alloc_descrs[0].length) {
-	  delete buffer;
+
+	std::unique_ptr<uint8_t[]> bufferAlloc(new uint8_t[alloc_descrs[i].length]);
+	uint8_t		*currentPtr = bufferAlloc.get();
+
+	if (read(fd, bufferAlloc.get(), alloc_descrs[i].length)
+		!= alloc_descrs[i].length) {
 	  return false;
 	}
 
-	file_id = new FileIdentifier(buffer, charset);
-	
-	delete buffer;
+	auto *fi = new FileIdentifier(bufferAlloc.get(),
+								  alloc_descrs[i].length, charset);
+	while (fi != NULL) {
+	  FIDs.push_back(fi);
+	  currentPtr += fi->getSize();
+	  fi = fi->getNextFID(currentPtr);
+	}
   }
   return true;
 }
@@ -91,9 +96,13 @@ std::string		FileEntry::toString() const {
   for (uint32_t i = 0; i < length_alloc_descs / 8; i++) {
 	oss << "\t" << alloc_descrs[i].toString() << "\n";
   }
-  if (file_id) {
-	oss << "--> Alloc Descriptors:\n"
-		<< file_id->toString();
+  if (FIDs.size()) {
+	oss << "--> Alloc Descriptors:\n";
+	int i = 0;
+	for (auto it = FIDs.begin(); it != FIDs.end(); ++it, ++i) {
+	  oss << "***FID N° " << i << "***\n";
+	  oss << (*it)->toString();
+	}
   }
   return oss.str();
 }

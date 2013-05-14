@@ -59,30 +59,33 @@ bool	FileSystem::loadFirstDir()
 	std::cout << tag.toString() << std::endl;
 
   ////////////
-  for (int i = 1; i < 20; i++)
-  {
-	goTo(addr.location.block_nbr + i);
+  /*
+  for (int i = 18; i < 22; i++)
+	{
+	  goTo(addr.location.block_nbr + i);
 
-	if (read(fd, buffer, 16) != 16) {
-	  std::cerr << "Error: Unable to read sector " << std::endl;
-	  return false;
-	}
-  
-	Tag tag(i);
-	tag.setData(buffer);
-
-	if (tag.type == Tag::FileEntry)
-	  {
-		FileEntry fe(root->getCharset());
-		fe.loadFromFd(tag, fd);
-		fe.loadAllocDescs(*this, fd);
-
-		std::cout << fe.toString() << std::endl;
+	  if (read(fd, buffer, 16) != 16) {
+		std::cerr << "Error: Unable to read sector " << std::endl;
+		return false;
 	  }
+  
+	  Tag tag(addr.location.block_nbr + i);
+	  tag.setData(buffer);
 
-  }
+	  if (tag.type == Tag::FileEntry)
+		{
+		  FileEntry fe(root->getCharset());
+		  fe.loadFromFd(tag, fd);
+		  fe.loadAllocDescs(*this, fd);
+
+		  std::cout << fe.toString() << std::endl;
+		}
+	  else
+		std::cout << "###" << addr.location.block_nbr + i << " -> "
+				  << tag.type << " => " << tag.getTypeName() << std::endl;
+	}
   /////////////
-
+  */
   return true;
 }
 

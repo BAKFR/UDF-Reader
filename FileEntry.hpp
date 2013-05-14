@@ -3,6 +3,8 @@
 
 #include "Descriptor.hpp"
 #include "ICBTag.hpp"
+#include <vector>
+#include <memory>
 
 class FileSystem;
 class FileIdentifier;
@@ -25,9 +27,9 @@ protected:
   uint32_t		length_ext_attrs;
   uint32_t		length_alloc_descs;
 
-  short_ad		*alloc_descrs;
+  std::unique_ptr<short_ad[]>		alloc_descrs;
 
-  FileIdentifier		*file_id;
+  std::vector<FileIdentifier*>		FIDs;
 public:
   FileEntry(const charspec &charset);
 
