@@ -14,17 +14,38 @@ FileEntry::FileEntry(const charspec &charset)
 void	FileEntry::setData(uint8_t *buffer)
 {
   ICB_tag.setData(buffer);
-
-  buffer += 36;
+ 
+  buffer += 20;
+  Uid = ((uint32_t*) buffer)[0];  
+  buffer += 4;
+  Gid = ((uint32_t*) buffer)[0];
+  buffer += 4;
+  Permissions = ((uint32_t*) buffer)[0];
+  buffer += 4;
+  file_link_count = ((uint16_t*) buffer)[0];
+  buffer += 2;
+  record_format = ((uint8_t*) buffer)[0];
+  buffer += 1;
+  record_display_attributes = ((uint8_t*) buffer)[0];
+  buffer += 1;
   record_length = ((uint32_t*) buffer)[0];
-
-  buffer += 12;
+  buffer += 4;
+  information_length = ((uint64_t*) buffer)[0];
+  buffer += 8;
   logical_block_recorded = ((uint64_t*) buffer)[0];
-
-  buffer += 48;
+  buffer += 8;
+  access_time = ((Timestamp*) buffer)[0];
+  buffer += 12;
+  modification_time = ((Timestamp*) buffer)[0];
+  buffer += 12;
+  attribute_time = ((Timestamp*) buffer)[0];
+  buffer += 12;
+  checkpoint = ((uint32_t*) buffer)[0];
+  buffer += 4;
   ext_attr_ICB.setData(buffer);
-
-  buffer += 56;
+  buffer += 48;
+  unique_id = ((uint64_t*) buffer)[0];
+  buffer += 8;
   length_ext_attrs = ((uint32_t*) buffer)[0];
   buffer += 4;
   length_alloc_descs = ((uint32_t*) buffer)[0];
@@ -84,11 +105,19 @@ std::string		FileEntry::toString() const {
 
   oss << Descriptor::toString()
 	  << ICB_tag.toString()
-	  << "...\n"
+	  << "Uid: " << Uid << "\n"
+	  << "Gid: " << Gid << "\n"
+	  << "Permissions: " << Permissions << "\n"
+	  << "File Link Count: " << file_link_count << "\n"
+	  << "Record Format: " << record_format << "\n"
+	  << "Record Display Attributes: " << record_display_attributes << "\n"
 	  << "Record Length: " << record_length << "\n"
-	  << "...\n"
+	  << "Information Length: " << information_length << "\n"
 	  << "Logical Block Recorded: " << logical_block_recorded << "\n"
-	  << "...\n"
+    	  << "Access Time: " << access_time.toString() << "\n"
+	  << "Modification Time: " << modification_time.toString() << "\n"
+	  << "Attribute Time: " << attribute_time.toString() << "\n"
+	  << "Checkpoint: " << checkpoint << "\n"
 	  << "Extended Attribute ICB: "
 	  << ext_attr_ICB.toString()
 	  << "Length Extended Attributes: " << length_ext_attrs << "\n"
