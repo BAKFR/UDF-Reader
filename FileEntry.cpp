@@ -5,6 +5,7 @@
 #include <sstream>
 #include <memory>
 #include <algorithm>
+#include <unistd.h>
 
 FileEntry::FileEntry(const charspec &charset)
   : Descriptor("File Entry", 176), charset(charset)

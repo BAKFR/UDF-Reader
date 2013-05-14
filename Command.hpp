@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 #include "UDF.hpp"
-#include "FileSystemTree.hpp"
+#include "FileSystem.hpp"
 
 enum CommandType {
   COMMAND_TYPE_CD = 0,
@@ -22,7 +22,7 @@ public:
   void setUDFInfo(UDF::Info *i) {
     this->i = i;
   }
-  virtual bool execute(FileSystemTree &tree, UDF& udf) = 0;
+  virtual bool execute(FileSystem &tree, UDF& udf) = 0;
   void addArgument(std::string argument) {
     this->arguments.push_back(argument);
   }

@@ -53,7 +53,7 @@ void Prompt::run() {
     if (cmd != NULL) {
       cmd->setUDFInfo(i);
       displayArguments(cmd);
-      parser.execute(fst, cmd, udf);
+      parser.execute(*fs, cmd, udf);
       delete cmd;
     }
   }

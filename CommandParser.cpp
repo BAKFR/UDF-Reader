@@ -29,6 +29,6 @@ Command *CommandParser::parse(std::string commandString) {
   return NULL;
 }
 
-bool CommandParser::execute(FileSystemTree &tree, Command *command, UDF *udf) {
-  return command->execute(tree, *udf);
+bool CommandParser::execute(FileSystem &fs, Command *command, UDF *udf) {
+  return command->execute(fs, *udf);
 }

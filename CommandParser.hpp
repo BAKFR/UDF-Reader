@@ -3,7 +3,7 @@
 #include <string>
 #include "UDF.hpp"
 #include "ParseLink.hpp"
-#include "FileSystemTree.hpp"
+#include "FileSystem.hpp"
 #include "Command.hpp"
 
 class CommandParser
@@ -13,5 +13,5 @@ protected:
 public:
   CommandParser();
   Command* parse(std::string commandString);
-  bool execute(FileSystemTree &tree, Command *command, UDF* udf);
+  bool execute(FileSystem &tree, Command *command, UDF* udf);
 };

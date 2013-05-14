@@ -2,8 +2,9 @@
 #include <cstdlib>
 #include <iostream>
 #include "CommandEXIT.hpp"
+#include "FileSystem.hpp"
 
-bool CommandEXIT::execute(FileSystemTree &tree, UDF &udf) {
+bool CommandEXIT::execute(FileSystem &tree, UDF &udf) {
   (void)tree;
   (void)udf;
   std::cout<<"Command exit executed."<<std::endl;

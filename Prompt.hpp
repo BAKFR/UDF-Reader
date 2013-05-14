@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FileSystemTree.hpp"
+#include "FileSystem.hpp"
 #include "Command.hpp"
 #include "CommandParser.hpp"
 #include "UDF.hpp"
@@ -11,7 +11,6 @@ protected:
   int fd;
   FileSystem *fs;
   UDF::Info *i;
-  FileSystemTree fst;
   UDF *udf;
   CommandParser parser;
   std::string promptPath;
