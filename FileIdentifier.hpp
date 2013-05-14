@@ -26,4 +26,9 @@ public:
 
   FileIdentifier		*getNextFID(uint8_t *buffer) const;
   uint32_t		getSize() const;
+  bool	isParent() const;
+  bool	isHidden() const;
+  bool	isDirectory() const;
+
+  bool	isName(const std::string &name) const;
 };

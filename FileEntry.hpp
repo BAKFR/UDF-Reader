@@ -30,6 +30,7 @@ protected:
   std::unique_ptr<short_ad[]>		alloc_descrs;
 
   std::vector<FileIdentifier*>		FIDs;
+
 public:
   FileEntry(const charspec &charset);
 
@@ -38,4 +39,7 @@ public:
 
   uint32_t		getSizeAlloc();
   bool	loadAllocDescs(FileSystem &fs, int fd);
+
+  FileIdentifier *getFIDParent();
+  FileIdentifier *searchFID(const std::string &name);
 };

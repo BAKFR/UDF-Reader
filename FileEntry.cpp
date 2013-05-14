@@ -4,6 +4,7 @@
 #include "FileIdentifier.hpp"
 #include <sstream>
 #include <memory>
+#include <algorithm>
 
 FileEntry::FileEntry(const charspec &charset)
   : Descriptor("File Entry", 176), charset(charset)
@@ -46,7 +47,7 @@ bool	FileEntry::loadAllocDescs(FileSystem &fs, int fd) {
   buffer += length_ext_attrs;
 
   //Alloc Descriptors parsing
-  alloc_descrs = new short_ad[length_alloc_descs / 8];
+  alloc_descrs.reset(new short_ad[length_alloc_descs / 8]);
   for (uint32_t i = 0; i < length_alloc_descs / 8; i++) {
 	alloc_descrs[i].setData(buffer);
 	buffer += 8;
@@ -105,4 +106,21 @@ std::string		FileEntry::toString() const {
 	}
   }
   return oss.str();
+}
+
+FileIdentifier *FileEntry::getFIDParent() {
+  auto it = std::find_if(FIDs.begin(), FIDs.end(), [](FileIdentifier *fi) {
+	  return fi->isParent();
+	});
+  return it == FIDs.end() ? NULL : *it;
+}
+
+FileIdentifier *FileEntry::searchFID(const std::string &name) {
+  if (name == "..")
+	return getFIDParent();
+
+  auto it = std::find_if(FIDs.begin(), FIDs.end(), [name](FileIdentifier *fi) {
+	  return fi->isParent() && fi->isName(name);
+	});
+  return it == FIDs.end() ? NULL : *it;
 }

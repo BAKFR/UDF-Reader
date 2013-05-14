@@ -32,9 +32,14 @@ void	FileIdentifier::setData(uint8_t *buffer)
 std::string	    FileIdentifier::toString() const {
   std::ostringstream oss;
 
+  oss.flags(std::ios_base::boolalpha);
   oss << Descriptor::toString()
 	  << "Version: " << (int)version << "\n"
 	  << "Charasteristics: " << (int) charasteristics << "\n"
+	  << "\tHidden ? " << isHidden()
+	  << "; Directory ? " << isDirectory()
+	  << "; Parent ? " << isParent()
+	  << "\n"
 	  << "ICB: " << ICB.toString()
 	  << "length_impl_use: " << length_impl_use << "\n";
   if (length_impl_use)
@@ -58,3 +63,22 @@ uint32_t		FileIdentifier::getSize() const {
 
   return cur_size + (4 - (cur_size % 4) % 4);
 }
+
+bool			FileIdentifier::isHidden() const {
+  return charasteristics & 0x1;
+}
+
+bool			FileIdentifier::isDirectory() const {
+  return charasteristics & 0x2;
+}
+
+bool			FileIdentifier::isParent() const {
+  return charasteristics & 0x8;
+}
+
+bool			FileIdentifier::isName(const std::string &name) const
+{
+  return (name.length() == length_file_id
+		  && name == file_id.getRawString());
+}
+
