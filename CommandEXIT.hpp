@@ -2,9 +2,9 @@
 
 #include "UDF.hpp"
 #include "Command.hpp"
-#include "FileSystemTree.hpp"
+#include "FileSystem.hpp"
 
 class CommandEXIT : public Command {
 public:
-  virtual bool execute(FileSystemTree &tree, UDF& udf);
+  virtual bool execute(FileSystem &tree, UDF& udf);
 };

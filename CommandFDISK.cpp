@@ -1,8 +1,9 @@
 #include "UDF.hpp"
 #include <iostream>
 #include "CommandFDISK.hpp"
+#include "FileSystem.hpp"
 
-bool CommandFDISK::execute(FileSystemTree &tree, UDF& udf) {
+bool CommandFDISK::execute(FileSystem &tree, UDF& udf) {
   (void)tree;
   long double size = (uint64_t)i->block_size * i->nb_block;
   long double free_size = (uint64_t)i->free_size * i->nb_block;
