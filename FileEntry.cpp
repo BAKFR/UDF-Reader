@@ -67,7 +67,7 @@ bool	FileEntry::loadAllocDescs(FileSystem &fs, int fd) {
   buffer += length_ext_attrs;
 
   //Alloc Descriptors parsing
-  alloc_descrs = new short_ad[length_alloc_descs / 8];
+  alloc_descrs.reset(new short_ad[length_alloc_descs / 8]);
   for (uint32_t i = 0; i < length_alloc_descs / 8; i++) {
 	alloc_descrs[i].setData(buffer);
 	buffer += 8;
@@ -104,7 +104,6 @@ std::string		FileEntry::toString() const {
 
   oss << Descriptor::toString()
 	  << ICB_tag.toString()
-	  << "...\n"
 	  << "Uid: " << Uid << "\n"
 	  << "Gid: " << Gid << "\n"
 	  << "Permissions: " << Permissions << "\n"
