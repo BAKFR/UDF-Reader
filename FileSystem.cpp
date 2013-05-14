@@ -139,3 +139,15 @@ FileEntry		*FileSystem::getCurrentNode()
 {
   return current_node;
 }
+
+bool	FileSystem::move(const std::string &name)
+{
+  FileIdentifier *FID = current_node->searchFID(name);
+  if (!FID)
+	return false;
+  FileEntry *target = FID->loadTarget();
+  if (!target)
+	return false;
+  current_node = target;
+  return true;
+}

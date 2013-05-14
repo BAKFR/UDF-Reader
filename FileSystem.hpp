@@ -31,4 +31,6 @@ public:
   charspec		getCharset() const;
 
   FileEntry		*getCurrentNode();
+
+  bool	move(const std::string &name);
 };
