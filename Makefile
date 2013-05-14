@@ -2,7 +2,7 @@ NAME		=	UDF_reader
 
 CXX			=	g++
 RM			=	rm
-CXXFLAGS	=	-W -Wall -std=c++0x -DNDEBUG #-ggdb3
+CXXFLAGS	=	-W -Wall -std=c++0x -DNDEBUG -ggdb3
 SOURCES		=	main.cpp		\
 	AVDP.cpp	\
 	PrimaryVDesc.cpp	\
