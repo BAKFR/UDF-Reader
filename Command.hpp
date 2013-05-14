@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
+#include <sstream>
 #include "UDF.hpp"
 #include "FileSystem.hpp"
 
@@ -46,5 +47,19 @@ public:
     }
     return *it;
   }
+
+  std::vector<std::string> splitPath(std::string path, char delimiter) {
+    std::vector<std::string> result;
+
+    std::stringstream data(path);
+    std::string line;
+    while (std::getline(data, line, delimiter)) {
+      if (line != "") {
+	result.push_back(line);
+      }
+    }
+    return result;
+  }
+
   virtual ~Command(){}
 };
