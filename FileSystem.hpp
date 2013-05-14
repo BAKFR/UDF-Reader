@@ -4,6 +4,7 @@
 #include "Tag.hpp"
 
 class FileSetDesc;
+class FileEntry;
 
 class FileSystem {
 private:
@@ -14,6 +15,8 @@ private:
   int			fd;
 
   FileSetDesc	*root;
+  FileEntry		*current_node;
+  FileEntry		*root_node;
 
   template<typename T>
   T *loadDescriptor(Tag::Type type);
@@ -24,4 +27,8 @@ public:
 
   bool	loadRoot();
   bool	loadFirstDir();
+
+  charspec		getCharset() const;
+
+  FileEntry		*getCurrentNode();
 };

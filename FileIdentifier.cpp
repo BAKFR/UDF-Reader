@@ -1,5 +1,8 @@
 
 #include "FileIdentifier.hpp"
+#include "FileSystem.hpp"
+#include "FileEntry.hpp"
+
 #include <sstream>
 #include <cstring>
 
@@ -78,7 +81,13 @@ bool			FileIdentifier::isParent() const {
 
 bool			FileIdentifier::isName(const std::string &name) const
 {
-  return (name.length() == length_file_id
-		  && name == file_id.getRawString());
+  return (name == file_id.getRawString());
 }
 
+FileEntry		*FileIdentifier::loadTarget(FileSystem &fs, int fd)
+{
+  if (ICB.length != 0)
+	return FileEntry::fullLoad(fs, ICB.location.block_nbr, fd);
+  else
+	return NULL;
+}

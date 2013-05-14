@@ -5,6 +5,9 @@
 #include "Tag.hpp"
 #include "DString.hpp"
 
+class FileSystem;
+class FileEntry;
+
 class FileIdentifier : public Descriptor
 {
 protected:
@@ -31,4 +34,6 @@ public:
   bool	isDirectory() const;
 
   bool	isName(const std::string &name) const;
+
+  FileEntry		*loadTarget(FileSystem &fs, int fd);
 };

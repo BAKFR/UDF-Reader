@@ -2,7 +2,9 @@
 #include "FileSystem.hpp"
 #include "FileSetDesc.hpp"
 #include "FileEntry.hpp"
+#include "FileIdentifier.hpp"
 #include <unistd.h>
+#include <fcntl.h>
 
 FileSystem::FileSystem(const extend_ad &from, int block_size, int fd)
   : location(from), block_size(block_size), fd(fd), root(NULL)
@@ -35,57 +37,19 @@ bool	FileSystem::loadFirstDir()
 	return false;
   const long_ad &addr = root->getRootDir();
   
-  goTo(addr.location.block_nbr);
+  root_node = FileEntry::fullLoad(*this, addr.location.block_nbr, fd);
+  current_node = root_node;
 
-  uint8_t buffer[16];
 
-  if (read(fd, buffer, 16) != 16) {
-	std::cerr << "Error: Unable to read sector " << std::endl;
-	return false;
-  }
-  
-  Tag tag(addr.location.block_nbr);
-  tag.setData(buffer);
+  //
+  int fd_target = open("./bootmgr", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
-  if (tag.type == Tag::FileEntry)
-	{
-	  FileEntry fe(root->getCharset());
-	  fe.loadFromFd(tag, fd);
-	  fe.loadAllocDescs(*this, fd);
+  current_node = root_node->searchFID("bootmgr")->loadTarget(*this, fd);
+  current_node->copyFileContent(*this, fd, fd_target);
+  std::cout << current_node->toString() << std::endl;  
+  std::cout << "Hello world " << fd_target << std::endl;
 
-	  std::cout << fe.toString() << std::endl;
-	}
-  else
-	std::cout << tag.toString() << std::endl;
-
-  ////////////
-  /*
-  for (int i = 18; i < 22; i++)
-	{
-	  goTo(addr.location.block_nbr + i);
-
-	  if (read(fd, buffer, 16) != 16) {
-		std::cerr << "Error: Unable to read sector " << std::endl;
-		return false;
-	  }
-  
-	  Tag tag(addr.location.block_nbr + i);
-	  tag.setData(buffer);
-
-	  if (tag.type == Tag::FileEntry)
-		{
-		  FileEntry fe(root->getCharset());
-		  fe.loadFromFd(tag, fd);
-		  fe.loadAllocDescs(*this, fd);
-
-		  std::cout << fe.toString() << std::endl;
-		}
-	  else
-		std::cout << "###" << addr.location.block_nbr + i << " -> "
-				  << tag.type << " => " << tag.getTypeName() << std::endl;
-	}
-  /////////////
-  */
+  //  std::cout << "\n\n" << fe->toString() << std::endl;  
   return true;
 }
 
@@ -163,4 +127,15 @@ bool	FileSystem::goTo(uint32_t sector)
   lseek(fd, location.location * 2048, SEEK_SET);
   lseek(fd, sector * block_size, SEEK_CUR);
   return true;
+}
+
+
+charspec		FileSystem::getCharset() const 
+{
+  return root->getCharset();
+}
+
+FileEntry		*FileSystem::getCurrentNode()
+{
+  return current_node;
 }

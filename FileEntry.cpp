@@ -50,7 +50,6 @@ void	FileEntry::setData(uint8_t *buffer)
   buffer += 4;
   length_alloc_descs = ((uint32_t*) buffer)[0];
 
-  alloc_descrs = NULL;
 }
 
 bool	FileEntry::loadAllocDescs(FileSystem &fs, int fd) {
@@ -68,30 +67,32 @@ bool	FileEntry::loadAllocDescs(FileSystem &fs, int fd) {
   buffer += length_ext_attrs;
 
   //Alloc Descriptors parsing
-  alloc_descrs.reset(new short_ad[length_alloc_descs / 8]);
   for (uint32_t i = 0; i < length_alloc_descs / 8; i++) {
-	alloc_descrs[i].setData(buffer);
+	short_ad sad;
+	sad.setData(buffer);
 	buffer += 8;
 
-	if (!fs.goTo(alloc_descrs[i].position))
-	  return false;
+	if (ICB_tag.file_type != 5) {
+	  if (!fs.goTo(sad.position))
+		return false;
 
 
-	std::unique_ptr<uint8_t[]> bufferAlloc(new uint8_t[alloc_descrs[i].length]);
-	uint8_t		*currentPtr = bufferAlloc.get();
+	  std::unique_ptr<uint8_t[]> bufferAlloc(new uint8_t[sad.length]);
+	  uint8_t		*currentPtr = bufferAlloc.get();
 
-	if (read(fd, bufferAlloc.get(), alloc_descrs[i].length)
-		!= alloc_descrs[i].length) {
-	  return false;
+	  if (read(fd, bufferAlloc.get(), sad.length) != sad.length) {
+		return false;
+	  }
+
+	  auto *fi = new FileIdentifier(bufferAlloc.get(),
+									sad.length, charset);
+	  while (fi != NULL) {
+		FIDs.push_back(fi);
+		currentPtr += fi->getSize();
+		fi = fi->getNextFID(currentPtr);
+	  }
 	}
-
-	auto *fi = new FileIdentifier(bufferAlloc.get(),
-								  alloc_descrs[i].length, charset);
-	while (fi != NULL) {
-	  FIDs.push_back(fi);
-	  currentPtr += fi->getSize();
-	  fi = fi->getNextFID(currentPtr);
-	}
+	alloc_descrs.push_back(sad);
   }
   return true;
 }
@@ -123,9 +124,12 @@ std::string		FileEntry::toString() const {
 	  << "Length Extended Attributes: " << length_ext_attrs << "\n"
 	  << "Length Allocation Descriptors: " << length_alloc_descs << "\n"
 	  << "Allocation Descriptors:\n";
-  for (uint32_t i = 0; i < length_alloc_descs / 8; i++) {
-	oss << "\t" << alloc_descrs[i].toString() << "\n";
-  }
+
+  for (const short_ad &sad : alloc_descrs)
+	oss << "\t" << sad.toString() << "\n";
+  // for (uint32_t i = 0; i < length_alloc_descs / 8; i++) {
+  // 	oss << "\t" << alloc_descrs[i].toString() << "\n";
+  //}
   if (FIDs.size()) {
 	oss << "--> Alloc Descriptors:\n";
 	int i = 0;
@@ -149,7 +153,41 @@ FileIdentifier *FileEntry::searchFID(const std::string &name) {
 	return getFIDParent();
 
   auto it = std::find_if(FIDs.begin(), FIDs.end(), [name](FileIdentifier *fi) {
-	  return fi->isParent() && fi->isName(name);
+	  return !fi->isParent() && fi->isName(name);
 	});
   return it == FIDs.end() ? NULL : *it;
+}
+
+
+FileEntry	*FileEntry::fullLoad(FileSystem &fs, int sector, int fd)
+{
+  fs.goTo(sector);
+  
+  uint8_t buffer[16];
+  
+  if (read(fd, buffer, 16) != 16) {
+	std::cerr << "Error: Unable to read sector " << std::endl;
+	return NULL;
+  }
+  
+  Tag tag(sector);
+  tag.setData(buffer);
+  
+  FileEntry *fe = new FileEntry(fs.getCharset());
+  fe->loadFromFd(tag, fd);
+  fe->loadAllocDescs(fs, fd);
+  return fe;
+}
+
+bool	FileEntry::copyFileContent(FileSystem &fs, int fd, int fd_target)
+{
+  for (const short_ad &sad : alloc_descrs) {
+	std::cout << "CP BLOCK" << std::endl;
+	
+	fs.goTo(sad.position);
+	std::unique_ptr<uint8_t[]> buffer(new uint8_t[sad.length]);
+	read(fd, buffer.get(), sad.length);
+	write(fd_target, buffer.get(), sad.length);
+  }
+  return true;
 }

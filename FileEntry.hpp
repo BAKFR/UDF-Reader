@@ -37,7 +37,8 @@ protected:
   uint32_t		length_ext_attrs;
   uint32_t		length_alloc_descs;
 
-  std::unique_ptr<short_ad[]>		alloc_descrs;
+  //std::unique_ptr<short_ad[]>		alloc_descrs;
+  std::vector<short_ad>	alloc_descrs;
 
   std::vector<FileIdentifier*>		FIDs;
 
@@ -52,4 +53,9 @@ public:
 
   FileIdentifier *getFIDParent();
   FileIdentifier *searchFID(const std::string &name);
+
+
+  bool	copyFileContent(FileSystem &fs, int fd, int fd_target);
+  
+  static FileEntry		*fullLoad(FileSystem &fs, int sector, int fd);
 };
