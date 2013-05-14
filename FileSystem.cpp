@@ -40,16 +40,6 @@ bool	FileSystem::loadFirstDir()
   root_node = FileEntry::fullLoad(*this, addr.location.block_nbr, fd);
   current_node = root_node;
 
-
-  //
-  int fd_target = open("./bootmgr", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-
-  current_node = root_node->searchFID("bootmgr")->loadTarget(*this, fd);
-  current_node->copyFileContent(*this, fd, fd_target);
-  std::cout << current_node->toString() << std::endl;  
-  std::cout << "Hello world " << fd_target << std::endl;
-
-  //  std::cout << "\n\n" << fe->toString() << std::endl;  
   return true;
 }
 
@@ -145,9 +135,24 @@ bool	FileSystem::move(const std::string &name)
   FileIdentifier *FID = current_node->searchFID(name);
   if (!FID)
 	return false;
-  FileEntry *target = FID->loadTarget();
+  FileEntry *target = FID->loadTarget(*this, fd);
   if (!target)
 	return false;
   current_node = target;
   return true;
+}
+
+void	FileSystem::setCurrentNode(FileEntry *fe)
+{
+  current_node = fe;
+}
+
+bool	FileSystem::copy(const std::string &name, int fd_target)
+{
+  FileIdentifier *FID = root_node->searchFID(name);
+  if (!FID) {
+	std::cerr << "Error: file " << name << " not found!" << std::endl;
+	return false;
+  }
+  return FID->loadTarget(*this, fd)->copyFileContent(*this, fd, fd_target);
 }

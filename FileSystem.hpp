@@ -31,6 +31,8 @@ public:
   charspec		getCharset() const;
 
   FileEntry		*getCurrentNode();
+  void			setCurrentNode(FileEntry *fe);
 
   bool	move(const std::string &name);
+  bool  copy(const std::string &name, int fd_target);
 };
