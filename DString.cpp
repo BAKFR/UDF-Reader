@@ -35,3 +35,13 @@ std::string	DString::toString() const {
 
   return oss.str();
 }
+
+const charspec	*DString::getCharset() const
+{
+  return charset;
+}
+
+int	       DString::getSize() const
+{
+  return size;
+}

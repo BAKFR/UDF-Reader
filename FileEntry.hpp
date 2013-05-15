@@ -3,6 +3,7 @@
 
 #include "Descriptor.hpp"
 #include "ICBTag.hpp"
+#include "FileIdentifier.hpp"
 #include <vector>
 #include <memory>
 
@@ -56,6 +57,8 @@ public:
 
 
   bool	copyFileContent(FileSystem &fs, int fd, int fd_target);
-  
+
+  std::vector<FileIdentifier::InfoDir *>	getInfoDir(FileSystem &fs, int fd);
+  Timestamp	getTime() const;
   static FileEntry		*fullLoad(FileSystem &fs, int sector, int fd);
 };

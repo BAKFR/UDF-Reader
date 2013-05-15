@@ -10,6 +10,14 @@ class FileEntry;
 
 class FileIdentifier : public Descriptor
 {
+public:
+ struct InfoDir {
+  const charspec	*name;
+   int		type;
+   int		length;
+   Timestamp	date;
+};
+
 protected:
   charspec		charset;
   uint32_t		length;
@@ -21,6 +29,7 @@ protected:
   uint16_t		length_impl_use;
   uint8_t		*impl_use;
   DString		file_id;
+ 
 public:
   FileIdentifier(uint8_t *buffer, uint32_t length, charspec charset);
 
@@ -32,6 +41,7 @@ public:
   bool	isParent() const;
   bool	isHidden() const;
   bool	isDirectory() const;
+  FileIdentifier::InfoDir *getInfoDir(FileSystem &fs, int fd);
 
   bool	isName(const std::string &name) const;
 

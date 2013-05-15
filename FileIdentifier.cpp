@@ -91,3 +91,14 @@ FileEntry		*FileIdentifier::loadTarget(FileSystem &fs, int fd)
   else
 	return NULL;
 }
+
+FileIdentifier::InfoDir			*FileIdentifier::getInfoDir(FileSystem &fs, int fd)
+{
+  InfoDir	*tmp = new InfoDir();
+  
+  tmp->name = file_id.getCharset();
+  tmp->type = length_file_id;
+  tmp->length = file_id.getSize();
+  tmp->date = loadTarget(fs, fd)->getTime();
+  return tmp;
+}

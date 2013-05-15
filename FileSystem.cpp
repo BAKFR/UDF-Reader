@@ -156,3 +156,9 @@ bool	FileSystem::copy(const std::string &name, int fd_target)
   }
   return FID->loadTarget(*this, fd)->copyFileContent(*this, fd, fd_target);
 }
+
+bool	FileSystem::Dir()
+{
+  getCurrentNode()->getInfoDir(*this, fd);
+  return true;
+}

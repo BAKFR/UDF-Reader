@@ -192,3 +192,17 @@ bool	FileEntry::copyFileContent(FileSystem &fs, int fd, int fd_target)
   }
   return true;
 }
+
+Timestamp	FileEntry::getTime() const
+{
+  return access_time;
+}
+
+std::vector<FileIdentifier::InfoDir *>	FileEntry::getInfoDir(FileSystem &fs, int fd)
+{
+  std::vector<FileIdentifier::InfoDir *>	tmp;
+  for (auto it = FIDs.begin(); it != FIDs.end(); ++it) {
+    tmp.push_back((*it)->getInfoDir(fs, fd));
+  }
+ return tmp;
+}
