@@ -60,5 +60,6 @@ public:
 
   std::vector<FileIdentifier::InfoDir *>	getInfoDir(FileSystem &fs, int fd);
   Timestamp	getTime() const;
+  uint64_t		getLength() const;
   static FileEntry		*fullLoad(FileSystem &fs, int sector, int fd);
 };

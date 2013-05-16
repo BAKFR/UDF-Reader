@@ -12,9 +12,10 @@ class FileIdentifier : public Descriptor
 {
 public:
  struct InfoDir {
-  const charspec	*name;
-   int		type;
-   int		length;
+   bool			hidden;
+   std::string	name;
+   bool			isDir;
+   uint64_t		length;
    Timestamp	date;
 };
 

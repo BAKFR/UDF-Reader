@@ -9,28 +9,21 @@ from Beijing Jiaotong University (Beijing, China).
 
 ___
 
-At current version, It only display some informations about the UDF file:
-
- - check if file is really an UDF file
- - access to AVDP sector and dump it
- - access to Primary Volume Descriptor and dump it
-
-An UDF file msut be passed in argument:
+An UDF file must be passed in argument:
 
 ```bash
 $> make
-$> ./UDF_reader my_UDF_file.iso
+$> ./UDF_reader my_UDF_file.iso	# or with a real DVD: ./UDF_reader /dev/sr0
 Is it a valid UDF file ? true
-Loading AVDP ....
-TAG Type 2
-version: 2
-checksum: 116 (true)
-serial: 0
-CRC: 26136 (length = 496)
-location: 256 (true)
---------------
-main Volume Descriptor Sequence: extent_ad(length: 32768, location: 257)
-reserve Volume Descriptor Sequence: extent_ad(length: 32768, location: 275)
-
-# ... more info displayed ...
+$> # type commands here
+$>exit
 ```
+
+
+When started, it provides a basic prompt where you can execute some commands:
+
+ - `dir`: display informations about current directory and it's content.
+ - `cd`: 
+ - `cp`: copy a file from UDF file system.
+ - `exit` for exitting the program.
+

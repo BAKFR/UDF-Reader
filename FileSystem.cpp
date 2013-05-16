@@ -149,7 +149,7 @@ void	FileSystem::setCurrentNode(FileEntry *fe)
 
 bool	FileSystem::copy(const std::string &name, int fd_target)
 {
-  FileIdentifier *FID = root_node->searchFID(name);
+  FileIdentifier *FID = current_node->searchFID(name);
   if (!FID) {
 	std::cerr << "Error: file " << name << " not found!" << std::endl;
 	return false;
@@ -157,8 +157,7 @@ bool	FileSystem::copy(const std::string &name, int fd_target)
   return FID->loadTarget(*this, fd)->copyFileContent(*this, fd, fd_target);
 }
 
-bool	FileSystem::Dir()
+std::vector<FileIdentifier::InfoDir*>	FileSystem::getDirInfo()
 {
-  getCurrentNode()->getInfoDir(*this, fd);
-  return true;
+  return getCurrentNode()->getInfoDir(*this, fd);
 }

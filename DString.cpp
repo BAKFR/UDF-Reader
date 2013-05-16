@@ -12,6 +12,8 @@ void	DString::setData(uint8_t *buffer, int size, const charspec *charset) {
 }
 
 std::string DString::getRawString() const {
+  if (!size)
+	return "";
   if (charset->type == 0 &&
 	  strcmp((char*) charset->data, "OSTA Compressed Unicode") == 0) {
 	if (data[0] != 16)

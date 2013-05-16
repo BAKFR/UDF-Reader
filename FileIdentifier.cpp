@@ -96,9 +96,13 @@ FileIdentifier::InfoDir			*FileIdentifier::getInfoDir(FileSystem &fs, int fd)
 {
   InfoDir	*tmp = new InfoDir();
   
-  tmp->name = file_id.getCharset();
-  tmp->type = length_file_id;
-  tmp->length = file_id.getSize();
-  tmp->date = loadTarget(fs, fd)->getTime();
+  FileEntry *fe = loadTarget(fs, fd);
+
+  tmp->hidden = isHidden();
+  tmp->name = isParent() ? ".." : file_id.getRawString();
+  tmp->isDir = isDirectory();
+  tmp->length = fe->getLength();
+  tmp->date = fe->getTime();
+  delete fe;
   return tmp;
 }

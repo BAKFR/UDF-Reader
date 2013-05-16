@@ -35,11 +35,11 @@ void	FileEntry::setData(uint8_t *buffer)
   buffer += 8;
   logical_block_recorded = ((uint64_t*) buffer)[0];
   buffer += 8;
-  access_time = ((Timestamp*) buffer)[0];
+  access_time.setData(buffer);
   buffer += 12;
-  modification_time = ((Timestamp*) buffer)[0];
+  modification_time.setData(buffer);
   buffer += 12;
-  attribute_time = ((Timestamp*) buffer)[0];
+  attribute_time.setData(buffer);
   buffer += 12;
   checkpoint = ((uint32_t*) buffer)[0];
   buffer += 4;
@@ -195,7 +195,12 @@ bool	FileEntry::copyFileContent(FileSystem &fs, int fd, int fd_target)
 
 Timestamp	FileEntry::getTime() const
 {
-  return access_time;
+  return modification_time;
+}
+
+uint64_t		FileEntry::getLength() const
+{
+  return information_length;
 }
 
 std::vector<FileIdentifier::InfoDir *>	FileEntry::getInfoDir(FileSystem &fs, int fd)

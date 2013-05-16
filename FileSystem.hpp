@@ -2,11 +2,12 @@
 #pragma once
 
 #include "Tag.hpp"
+#include "FileIdentifier.hpp"
 #include <vector>
 
 class FileSetDesc;
 class FileEntry;
-struct InfoDir;
+
 
 class FileSystem {
 private:
@@ -37,5 +38,5 @@ public:
 
   bool	move(const std::string &name);
   bool  copy(const std::string &name, int fd_target);
-  bool	Dir();
+  std::vector<FileIdentifier::InfoDir*>	getDirInfo();
 };
