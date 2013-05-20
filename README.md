@@ -23,7 +23,8 @@ $>exit
 When started, it provides a basic prompt where you can execute some commands:
 
  - `dir`: display informations about current directory and it's content.
- - `cd`: 
+ - `cd`: move into UDF subdirectories.
  - `cp`: copy a file from UDF file system.
+   **example:** `cp myFileFromDisk.txt ~/file.txt`
  - `exit` for exitting the program.
 
